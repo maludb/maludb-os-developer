@@ -9,7 +9,8 @@ users in, following the `maludb-os-integration` contract.
 
 ## State
 
-**Research phase (2026-10-11).** Five reports are in [`docs/research/`](docs/research/):
+**Phase 0 complete (2026-10-11)** — the kit, the schema (db/001–011) and *the door* are built and proven (`tests/phase0/`,
+`tests/door/`, `tests/integration/`); Phase 1, the tool surface and the screens' specifications, awaits the owner's go. Five research reports are in [`docs/research/`](docs/research/):
 
 | Report | What it covers |
 |---|---|
@@ -20,7 +21,7 @@ users in, following the `maludb-os-integration` contract.
 | [05-safety.md](docs/research/05-safety.md) | Credential models, the vulnerability history of web database tools, change control alongside numbered migrations, AI agents with database access, the threat model. 36 requirements (S1–S36) and the owner's decisions. |
 
 **Design written (2026-10-11):** [`docs/developer-design.md`](docs/developer-design.md) — §0–§16, decisions D1–D16 and four open
-questions awaiting the owner. In short: one sandboxed service (*the door*) is the only path to any database and the only holder of
+questions, approved by the owner as recommended (§15). In short: one sandboxed service (*the door*) is the only path to any database and the only holder of
 the tool's database credentials; every database has a class whose ceiling the door enforces; installed applications' schemas change
 only through migration files drafted, rehearsed and linted here and applied by the existing route, while *workbenches* the tool
 creates are designed live; rows are deny-by-default per person and masks are database privileges, not a display filter; row edits on production happen only in

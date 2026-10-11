@@ -87,7 +87,8 @@ MaluDb memory system … allow database objects to be maintained in a graphical 
   synthetic; `config/.env` is gitignored.
 - **sudo is the owner's.** The cluster roles, the passfile, `grant-target.sh`, Graphviz, `dx_template`, per-role pgaudit and
   `pg_stat_statements` are root steps in `deploy/ROOT_STEPS.sh` — ask for them; never run them. The owner gave leave (2026-10-11, design §15 (d)) to use
-  `sudo -n -u postgres` for the proofs' scratch roles and databases named `dx_*` — nothing else.
+  `sudo -n -u postgres` for the proofs' scratch roles and databases named `dx_*`, and (2026-10-11) to create the application's three
+  installer roles `developer_rw`, `developer_records_ro`, `developer_activity_ro` for the proofs — nothing else.
 - The kernel's rules copied here: activity `source` is `web` for the UI, `agent` under a run token, `cron` / `system` for the worker and
   the door; `action` is `entity.verb`; `mcp_*` views are the only thing the read roles see; the shared-schema rule — survey the
   siblings before any `CREATE TABLE`, reuse verbatim, extend by appending, record every table as read / reuse / new (design §6.11).
@@ -96,5 +97,10 @@ MaluDb memory system … allow database objects to be maintained in a graphical 
 ## State
 2026-10-11 — the repository created (public) and the research done (`docs/research/01–05`); **the design written**
 (`docs/developer-design.md` §0–§16, D1–D16 and four open questions), revised after a fresh-eyes review the same day — **APPROVED by the owner as recommended** (D1–D16, (a)–(d), §15); **K49
-applied** (kernel db/183). Phase 0 in progress. Numbers proposed: kernel
-db/183 (K49), K50–K54, ports 8201 / 8858 / 8859 and the door's socket, scratch 9401–9407, prefix `dx_`. Nothing built.
+applied** (kernel db/183). **PHASE 0 COMPLETE 2026-10-11**: the kit (db/001–005, MaluMail's fork; `tests/phase0/run.sh` 102 checks
+without a kernel), the schema db/006–011 (`tests/phase0/schema.sh` 127 checks), the door and the grants service (`services/door/`,
+`services/grants/`, libpg_query 17-6.2.5 built by `deploy/build-libpg_query.sh`; `tests/door/run.sh` 174 checks, findings in
+`tests/door/FINDINGS.md`), the door against the real schema (`tests/integration/sql_policy.sh` 11 checks), `maludb-os.json`, the two
+agents, ten skills, `deploy/`; the installer's `plan` reads clean but for what ROOT_STEPS step 0 pins and what exists only after install.
+Numbers: kernel db/183 (K49), K50–K54, ports 8201 / 8858 / 8859 and the door's socket, scratch 9401–9407, prefix `dx_`. **Next: the
+owner's go → Phase 1** (tool surface, action manifest and registry, three build specs, slice specs — approved together before feature PHP).

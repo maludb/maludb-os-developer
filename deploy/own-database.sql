@@ -19,6 +19,10 @@
 
 CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
 
+-- developer_meta is the catalog tier everywhere (default_transaction_read_only = on), but on the tool's OWN database it writes the audit
+-- through the dx_door_* functions (the door proof's finding 7): the read-only default is lifted for this one database.
+SELECT format('ALTER ROLE developer_meta IN DATABASE %I SET default_transaction_read_only = off', current_database()) \gexec
+
 SELECT format('GRANT CONNECT ON DATABASE %I TO developer_meta, developer_grantor, developer_signaller', current_database()) \gexec
 GRANT USAGE ON SCHEMA public TO developer_meta, developer_grantor, developer_signaller;
 
@@ -35,7 +39,10 @@ BEGIN
         RAISE NOTICE 'door: EXECUTE on % for developer_meta', f;
     END LOOP;
     IF to_regclass('public.mcp_grant_plan') IS NOT NULL THEN
-        GRANT SELECT ON public.mcp_grant_plan TO developer_grantor;
+        GRANT SELECT ON public.mcp_grant_plan, public.mcp_grant_targets TO developer_grantor;
+        IF to_regprocedure('public.dx_grants_pass_log(text, jsonb)') IS NOT NULL THEN
+            GRANT EXECUTE ON FUNCTION public.dx_grants_pass_log(text, jsonb) TO developer_grantor;   -- the grants service records each pass
+        END IF;
         RAISE NOTICE 'grants service: SELECT on mcp_grant_plan for developer_grantor';
     ELSE
         RAISE NOTICE 'mcp_grant_plan does not exist yet (the schema) — run this file again after the next apply';

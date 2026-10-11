@@ -415,8 +415,7 @@ targets are not the tool's memory: it reads them live, through the door.
 
 **Who may talk to the door.** Developer's PHP runs **in its own PHP-FPM pool under the system user `developer-web`** (the vhost hands
 `.php` to the pool's socket; mod_php keeps serving every other application) — so a peer check means "this application", not "any
-application on the host". The two MCP servers run as `developer-mcp`. The door listens on a Unix socket (`/run/developer/door.sock`,
-group `developer` = `developer-web` + `developer-mcp`), checks `SO_PEERCRED`, and requires each request to carry an HMAC under
+application on the host". The two MCP servers run as `developer-mcp`. The door listens on a Unix socket (`/run/developer/door.sock`, group `developer` = `developer-web` + `developer-mcp`, handed to it by a systemd socket unit so its own user stays out of that group), checks `SO_PEERCRED`, and requires each request to carry an HMAC under
 `DX_DOOR_KEY` (in `config/.env`, which is readable by `developer-web` alone — the installer's default group is changed by
 `ROOT_STEPS.sh` until K54). The request names the caller (member id), on whose behalf (K38's person), the agent run, the target and the
 source; the door confirms the member is active in the mirror and computes everything else itself.
@@ -454,8 +453,7 @@ connected to an `application`, `development` or workbench database of the regist
 superuser's (which `pg_signal_backend` cannot reach anyway — the screen says to cancel those from `psql` as `postgres`).
 
 **The grants service** (`developer-grants`) keeps the column privileges of `developer_read`, `developer_read_masked` and
-`developer_write` in step with the classifications (§6.9): every minute it reads the plan (`mcp_grant_plan`, a view over
-`column_classes` and `target_databases`, as `developer_records_ro`) and, as `developer_grantor`, grants and revokes column privileges
+`developer_write` in step with the classifications (§6.9): every minute it reads the plan (`mcp_grant_plan`, a view over `column_classes` and `target_databases`) as `developer_grantor` itself — the installer's `developer_records_ro` password rotates with `--rotate-db-passwords` — and grants and revokes column privileges
 per registered target; **independently of the plan, it never grants a column whose name matches the built-in `secret` patterns** unless
 a super-admin cleared that column in the tool. A column a migration adds is unreadable to the tiers until the next pass ("grants
 pending, under a minute"); a table not created by `postgres` is reported "not granted to the tool" until the owner re-runs
@@ -508,8 +506,7 @@ pending, under a minute"); a table not created by `postgres` is reported "not gr
 7. **Audit**: an *intent* row before execution and its *result* after (§6.10); the activity log gets `sql.run` with the class, the
    target and the counts — **never the SQL text and never a value** (the Data Lake's rule).
 
-**Limits** (settings, D8): 30 s for a screen, 300 s for a workbench script or a rehearsal; at most **12 connections** held by the door
-in all, plus the grants service's one and the application's own pool — the tool's share of the cluster's 100 is capped at **16**;
+**Limits** (settings, D8): 30 s for a screen, 300 s for a workbench script or a rehearsal; at most **8 connections** held by the door in all — with the PHP-FPM pool's 6, the MCP servers' 2, the grants service's 1 and the worker's 1, the tool's share of the cluster's 100 is **18**;
 **2 concurrent runs per person**; a waiting request is told it waits. **Cancel** is answered beside the running request (a libpq cancel
 through psycopg's `cancel_safe()` for the run the caller owns); PHP **releases its session before it asks the door**, so Cancel is
 never queued behind the run it cancels.
@@ -704,8 +701,7 @@ review, export, commit, apply.
   are separate, confirmed actions through `dx_signal()` (§6.1) — never the kernel's or a memory database's sessions, never a superuser's;
   no "kill all". The screen refreshes itself every 5 s while open. A session of the tool itself is marked as such. The screens say what
   the tool's roles cannot see (T21).
-- **Maintenance jobs** (`maintenance_runs` compared with the Data Lake's canonical shape in Phase 0 — reused with appended columns if
-  they fit, else `db_maintenance_runs`): `VACUUM`, `ANALYZE`, `REINDEX CONCURRENTLY`, `REFRESH MATERIALIZED VIEW CONCURRENTLY` as jobs
+- **Maintenance jobs** (`maintenance_jobs`, new — the Data Lake's `maintenance_runs` was compared in Phase 0 and is a different concept, lake files merged and snapshots expired): `VACUUM`, `ANALYZE`, `REINDEX CONCURRENTLY`, `REFRESH MATERIALIZED VIEW CONCURRENTLY` as jobs
   run by the worker through the door (`developer_ops`, table-level `MAINTAIN`), with progress from `pg_stat_progress_*` and the lock
   each takes said before it starts; `VACUUM FULL` and `CLUSTER` refused (ACCESS EXCLUSIVE rewrites — `pg_repack` is Extended).
 - **Statistics**: `pg_stat_statements` top lists by total time, mean time, calls, rows and I/O, each linking to Explain (once the owner
@@ -829,8 +825,8 @@ does not select them and shows *masked*. **Agents read no rows** at all in versi
 | `query_runs`, `saved_queries` | **reuse** + appended columns (`query_runs` keeps its per-request grain) | the Data Lake db/011 |
 | `exports`, `worker_passes` | **reuse** | Spaces |
 | `notifications`, `notification_prefs`, `notification_outbox`, `agent_dispatches` | **reuse** | GL db/014 |
-| `maintenance_runs` | **reuse if the columns fit** (decided in Phase 0) | the Data Lake |
-| `target_databases`, `target_access`, `access_windows`, `catalog_index`, `catalog_snapshots`, `snapshot_objects`, `favourites`, `recents`, `workbenches`, `change_sets`, `change_set_items`, `rehearsals`, `migration_drafts`, `row_images`, `column_classes`, `door_statements`, `door_usage`, `explain_plans`, `diagram_layouts`, `backup_marks` | **new canonical** | — (no database registry, catalog, change set or migration draft exists anywhere in the estate) |
+
+| `target_databases`, `target_access`, `access_windows`, `catalog_index`, `catalog_index_passes`, `catalog_snapshots`, `snapshot_objects`, `favourites`, `recents`, `workbenches`, `change_sets`, `change_set_items`, `rehearsals`, `migration_drafts`, `row_images`, `column_classes`, `grants_passes`, `door_statements`, `door_usage`, `explain_plans`, `maintenance_jobs`, `diagram_layouts`, `backup_marks` | **new canonical** (`maintenance_jobs`: the Data Lake's `maintenance_runs` compared and found a different concept) | — (no database registry, catalog, change set or migration draft exists anywhere in the estate) |
 
 **Names avoided** (taken by another concept): `databases` / `database_views` (Spaces), `sources` (Knowledge, Inventory), `runs`
 (ProcessCore), `jobs`, `pipelines` (Sales CRM), `reports` (Shareholder Intelligence), `datasets` and `schema_versions` (the Data Lake),
@@ -868,6 +864,32 @@ On a scratch set of the tool's roles (`dx_proof_*`, made with the owner's leave 
 - **Plumbing**: the connection never reused across callers; caps (rows, bytes, cell length) and the timeout; **cancel** from a second
   request; squawk's wheel on this CPU; **the hostile-name suite** over the first generators; timings for a catalog page, a completion map
   and a 1,000-row page on the largest installed database.
+
+### 6.13 What Phase 0's proofs changed (2026-10-11 — `tests/door/FINDINGS.md`)
+
+Phase 0 built and proved the kit (`tests/phase0/run.sh`, 102 checks without a kernel), the schema (`tests/phase0/schema.sh`, 127
+checks), **the door** (`tests/door/run.sh`, 174 checks on scratch roles and databases) and the door against the real schema
+(`tests/integration/sql_policy.sh`, 11 checks). What they changed:
+
+- **libpg_query 17-6.2.5**, the PostgreSQL 17 grammar — the 18 line parses syntax this 17.11 server rejects; the pin moves with the
+  server's major. libpg_query's JSON leaves typed fields unwrapped (`CallStmt.funccall`, `AlterTableStmt.relation`): every tree walker
+  visits wrapped and unwrapped nodes — `CALL f()` slipped past the function screen until they did (a rule for `the-door.md`).
+- **The function screen is load-bearing**: no tier may rely on the estate's function privileges alone (an estate finding is *withheld from
+  the public copy (2026-10-11): reported privately to the owner; it will be published once fixed*). The deny-list gained `query_to_xml` and its family (SQL from a string), `nextval`, `setval`, `txid_current`.
+- **`xmin` is granted on its own** beside the readable columns (no tier ever holds table-level `SELECT`); the grid's concurrency check
+  needs it.
+- **The side-effect check compares deltas** of `pg_stat_xact_user_tables` from a baseline (PG 17 counts a session's earlier unflushed
+  transactions); a table whose triggers write elsewhere is refused in the grid **up front**, saying why.
+- **Workbench creation**: the rolemaker (CREATEDB) grants itself `SET` on the new role and creates the database `OWNER dxw_<n>`; table-level
+  `MAINTAIN` admits `pg_dump`'s locks, so clones need no `SELECT`; a clone also excludes `maludb*` and `mc2db` (the extension's schemas
+  stay behind `--exclude-extension`); a co-located-memory application clones in ~0.8 s, HR's schema in ~1.8 s.
+- **`developer_meta` writes the audit on the tool's own database**: its read-only default is lifted there alone
+  (`deploy/own-database.sql`). The grants service reads its plan as `developer_grantor` and records each pass (`grants_passes`).
+- **`dx_door_policy()` speaks the door's contract** (`ok`, `refusal{rule, message}`, `caller`, `on_behalf_of`, `target`, `rights`, `level`,
+  `window`, `workbench`, `limits`) plus `ceiling` and `tiers` for the screens; `query_runs` keeps the Data Lake's per-request grain with
+  `status` widened by `running`. **The connection budget** is the door's 8 within the tool's 18.
+- **Timings on this host** (scratch fixtures): a 1,000-row page 37–68 ms, a catalog page 40–62 ms, a completion map 11–20 ms, a grants
+  pass 56–204 ms, a rehearsal of 3 statements 1.0–1.8 s, a fresh loopback connection 29–37 ms.
 
 ## 7. The question inventory — what Developer exists to answer
 
@@ -1040,7 +1062,7 @@ refusals today) · The grants service (last pass, pending) · Agents · Worker �
 
 | Phase | Deliverable | Gate |
 |---|---|---|
-| 0 | this document and the owner's answers; **K49** (db/183); the kit without a kernel (`tests/phase0/run.sh`, MaluMail's fork, scope none, four roles with `held_by`, no `user` role); **the schema** `db/001`–`0NN` proven on a scratch database (`db/proof/phase0_proof.sql`: every actor of §2; the class ceilings and the levels of §3 for each right and each agent case — a chat turn limited to the person's targets, a duty, `is_eval`; the `held_by` refusals; windows requested, approved, step-up refused when stale, expired, frozen; a change set through every state; a draft observed applied from a snapshot; before-images and undo refused after a later change; `query_runs` and `saved_queries` verbatim against the Data Lake's with the appended columns; `door_statements` with an intent row; the classifier's proposals enforced at once; `mcp_grant_plan`); **the door proof** (`tests/door/`, §6.12); `maludb-os.json`, `os/{expert,advisor}.md`, ten skills (five runbooks), `deploy/` with `ROOT_STEPS.sh` (ports, the system users, the PHP-FPM pool, the cluster roles and the passfiles, the `pg_hba` lines, `grant-target.sh`, `dx_signal()`, the services' venv and the libpg_query build, Graphviz, `dx_template`, per-role pgaudit, `pg_stat_statements`), the installer's `plan` clean | the owner's go |
+| 0 — **COMPLETE 2026-10-11** | this document and the owner's answers; **K49** (db/183, applied); the kit without a kernel (`tests/phase0/run.sh`, MaluMail's fork, scope none, four roles with `held_by`, no `user` role); **the schema** `db/001`–`0NN` proven on a scratch database (`db/proof/phase0_proof.sql`: every actor of §2; the class ceilings and the levels of §3 for each right and each agent case — a chat turn limited to the person's targets, a duty, `is_eval`; the `held_by` refusals; windows requested, approved, step-up refused when stale, expired, frozen; a change set through every state; a draft observed applied from a snapshot; before-images and undo refused after a later change; `query_runs` and `saved_queries` verbatim against the Data Lake's with the appended columns; `door_statements` with an intent row; the classifier's proposals enforced at once; `mcp_grant_plan`); **the door proof** (`tests/door/`, §6.12); `maludb-os.json`, `os/{expert,advisor}.md`, ten skills (five runbooks), `deploy/` with `ROOT_STEPS.sh` (ports, the system users, the PHP-FPM pool, the cluster roles and the passfiles, the `pg_hba` lines, `grant-target.sh`, `dx_signal()`, the services' venv and the libpg_query build, Graphviz, `dx_template`, per-role pgaudit, `pg_stat_statements`), the installer's `plan` clean | the owner's go |
 | 1 | `docs/developer-mcp-tool-surface.md`, `docs/developer-action-manifest.md`, `mcp/action_registry.json`, `docs/build-specs/the-door.md` (the pipeline, the allow-list, the function screen, the tiers, the grants service), `docs/build-specs/ddl-generators.md` (the generators and the rule table), `docs/build-specs/change-review.md`, and the slice specs (`sso-shell` and ten slices; **the estate and object browser, the SQL workspace and change review are the exemplars**), each slice spec claiming its MUSTs from R, T, MR, E and S (`tests/phase1/check_specs.sh`) | **approved together, before any PHP** |
 | 2 | `/sso`, `/sso/logout`, the mirror and its timer, `members.roles`, `dx_has_right()`, the ingest bridge, the shell with the record picker, the switcher, the class badge and the htmx configuration and CSP, `/api/v1/health`, the vhost allow-list **on its own PHP-FPM pool**, `app/developer/door.php` (the client) with `door_unavailable`, **the door and the grants service running under systemd** (the door answering `ping` and one named catalog query), the worker's skeleton | hand-off replay refused; an unknown member refused; a revoked grant shuts every door within a minute; the door refuses a peer outside its group, a request without its HMAC and a target outside the registry; 375 and 1280 |
 | 3 | the slices, in order: **(1) the estate, access and the object browser — THE CRUD EXEMPLAR** (the registry and discovery with its precedence, classification and confirmation, grants state, the private flag, **access levels**, the classifier and **the grants service** keeping the tiers' column privileges, the database overview, schemas, families, the paged object tables, the catalog index and cross-database search, favourites and recents, the object page's skeleton with DDL from `pg_get_*def`) → **(2) structure, DDL and dependencies** (every family's page and tabs, our generators with the golden and hostile-name suites, impact, dependencies, join paths, the danger zone, roles and privileges read-only) → **(3) the SQL workspace through the door — THE FIRST EXEMPLAR** (the door's pipeline end to end — split, parse, classify by allow-list, screen functions, decide, execute at the person's level, cap, audit, cancel —, `query_runs` and `door_statements`, the CodeMirror island and the completion map, Format, history, saved queries, refusals that offer the grid or the draft, result exports) → **(4) workbenches, forms and change review — THE SECOND EXEMPLAR** (workbenches with their own roles, empty and cloned, CSV import into one, the forms for every family with the safe forms, change sets, the rule table and its annotations, squawk, the literals list, rehearsals with measured locks and rewrites, Apply on a workbench with lock timeouts and blockers, migration drafts, export a workbench as a migration, the observed-applied check) → **(5) data: the grid, the row page, change sets and windows** (the grid at the person's level, the row page with the picker and referencing rows, insert, staged change sets on the server, `xmin` conflicts, read and write windows with the step-up, Apply with exact-row and side-effect checks, before-images and undo, caps and the backup gate) → **(6) plans** (the options, the server-rendered tree and its flags, the PEV2 island, kept plans, `GENERIC_PLAN`) → **(7) activity and maintenance** (sessions, the root blocker, locks, normalized texts, `dx_signal()` cancel and terminate, maintenance jobs with progress, `pg_stat_statements`, the I/O, checkpointer, WAL, vacuum and wraparound panels) → **(8) health, snapshots, compare and diagrams** (the deterministic checks with fixes as change sets, bloat and index advice, snapshots and DDL history, drift, compare, Graphviz diagrams and saved layouts) → **(9) the memory section** (the estate and the owner's printed steps, tenant health, aggregates and graph statistics, models, skills, facades, the isolation audit; the content pages behind `memory.content` and the reveal; the grid's refusals) → **(10) agents, exports, notifications, home and admin** (the two agents' tools and actions, proposals, the Advisor's note and dispatches, export jobs, backup marks, notifications and prefs, K6 texts, the homes, settings, the audit screens, windows and reveals, the door's and the grants service's pages, freeze) | each slice: screens + handlers + logging + manifest entries + tools, proven at 375 and 1280 on scratch databases through a scratch door |
@@ -1223,5 +1245,12 @@ DNS label were answered before the research:
   table-level `MAINTAIN` and `dx_signal()` instead of cluster-wide roles; the memory login's reach acknowledged; agents without rows;
   typed production DML deferred; `query_runs` kept per request with a statement child; the DS crosswalk).
 - **2026-10-11** — **the owner approved everything** (§15); **K49 applied** (kernel db/183).
-- **Next**: Phase 0 — the kit, the schema and its proof, **the door proof**, the manifest, agents, skills and `deploy/` → the owner's go
-  → Phase 1.
+- **2026-10-11** — **PHASE 0 COMPLETE**: the kit forked from MaluMail's (db/001–005; `tests/phase0/run.sh` 102 checks without a kernel);
+  the schema db/006–011 (`tests/phase0/schema.sh` 127 checks); **the door** (`services/door/`, `services/grants/`, libpg_query 17-6.2.5;
+  `tests/door/run.sh` 174 checks) and the door against the real schema (`tests/integration/sql_policy.sh` 11 checks); `maludb-os.json`,
+  `os/expert.md`, `os/advisor.md`, ten skills, `deploy/` (ROOT_STEPS.sh, grant-target.sh, own-database.sql, the vhost on its own FPM pool,
+  the pool, the pg_hba lines, eleven units); the installer's `plan` reads clean but for the ports step 0 pins and what exists only after
+  install. Built by the planning model with two forked agents in worktrees (the door; the manifest and deploy), merged. What the proofs
+  changed is §6.13.
+- **Next**: the owner's go → **Phase 1** (the tool surface, the action manifest and its registry, the three build specs — the door, the DDL
+  generators and the rule table, Change review — and the slice specs, approved together before any feature PHP).
