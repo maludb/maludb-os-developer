@@ -1,0 +1,24 @@
+# NOTHING HERE HAS BEEN RUN — the owner runs it (the kernel's installer renders and enables this unit). Developer's records MCP server
+# (design §7): read-only tools for the kernel's hired agents and the kernel's token. It holds no target credential — every read of a
+# target database goes through the door's socket (group developer). It reads config/.env (root:developer 0640) for its own database
+# login (developer_records_ro).
+[Unit]
+Description=Developer records MCP server (FastMCP, loopback :{{MCP_RECORDS_PORT}})
+After=network.target postgresql.service developer-door.socket
+ConditionPathExists={{APP_DIR}}/mcp/records_server.py
+
+[Service]
+Type=simple
+User=developer-mcp
+Group=developer
+WorkingDirectory={{APP_DIR}}/mcp
+ExecStart={{APP_DIR}}/mcp/venv/bin/python {{APP_DIR}}/mcp/records_server.py
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target
