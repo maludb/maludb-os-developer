@@ -21,7 +21,7 @@ Schema (db/006, 009, 012, never modified, plus this slice's migration): `target_
    panel, never an error page (MR3). The MaluDB API is not called by this slice: Store B's per-user model store is Extended (D13), so the
    model configuration shown is Store A (the PostgreSQL store per namespace) and the screen says so.
 2. **A co-located memory schema** (the cidery's, ProcessCore's — a `memory` schema inside an `application` database) is read through the same
-   door kind with the schema named; this slice's migration `db/0NN_memory_section.sql` appends `memory_schemas` and `has_maludb` to
+   door kind with the schema named; db/013 (the Phase 1 fixes) appends `memory_schemas` and `has_maludb` to
    `dx_door_policy()`'s `target` object (a `CREATE OR REPLACE` with the JSON's keys appended, nothing else changed) — reported as a schema
    change. The door checks the named schema is one of `target.memory_schemas`.
 3. **The memory estate is assembled by PHP and by the records server from one call per memory target** (the door's `estate` on each visible
@@ -57,7 +57,7 @@ Schema (db/006, 009, 012, never modified, plus this slice's migration): `target_
   flag,owner-steps,backlog,unavailable,subject,walk-table}.php`
 - `services/door/memory_queries.py` — the library of `the-door.md` §5 (the Phase 0 names `tenant_counts`, `embedding_backlog`,
   `extension_version` folded into `tenant_health` and `estate`), `tests/door/test_memory_secrets.py` extended to every new query
-- `db/0NN_memory_section.sql` — `dx_door_policy()` with `target.memory_schemas` and `target.has_maludb` appended; nothing else
+- no migration: `dx_door_policy()` with `target.memory_schemas` and `target.has_maludb` appended is db/013's (the Phase 1 fixes)
 - `tests/phase3/slice9/{run.sh,lib.php,state.php,content.php,reveal.php,refusals.php,json.php,browser.mjs}`
 
 ## Query functions (signatures fixed)

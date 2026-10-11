@@ -102,5 +102,7 @@ without a kernel), the schema db/006–011 (`tests/phase0/schema.sh` 127 checks)
 `services/grants/`, libpg_query 17-6.2.5 built by `deploy/build-libpg_query.sh`; `tests/door/run.sh` 174 checks, findings in
 `tests/door/FINDINGS.md`), the door against the real schema (`tests/integration/sql_policy.sh` 11 checks), `maludb-os.json`, the two
 agents, ten skills, `deploy/`; the installer's `plan` reads clean but for what ROOT_STEPS step 0 pins and what exists only after install.
-Numbers: kernel db/183 (K49), K50–K54, ports 8201 / 8858 / 8859 and the door's socket, scratch 9401–9407, prefix `dx_`. **Next: the
-owner's go → Phase 1** (tool surface, action manifest and registry, three build specs, slice specs — approved together before feature PHP).
+Numbers: kernel db/183 (K49), K50–K54, ports 8201 / 8858 / 8859 and the door's socket, scratch 9401–9407, prefix `dx_`. **PHASE 1 WRITTEN 2026-10-11** — `docs/developer-mcp-tool-surface.md` (50 + 4 tools), `docs/developer-action-manifest.md` → `mcp/action_registry.json`
+(95 screens, 64 actions; five admit an agent, none pauses), db/012–013, `docs/build-specs/` (the-door, ddl-generators, change-review +
+eleven slices; exemplars slices 1, 3, 4), `docs/phase1-consistency.md`; `tests/phase1/check_specs.sh` 100 green (incl. the 182 research
+MUSTs), the reads proof 39. **Next: the owner's approval → Phase 2 (the shell).**

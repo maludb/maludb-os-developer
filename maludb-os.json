@@ -51,7 +51,8 @@
             "MALUDB_API_URL",
             "MALUDB_API_TOKEN",
             "DX_DOOR_SOCKET",
-            "DX_DOOR_KEY"
+            "DX_DOOR_KEY",
+            "DX_BRIDGE_KEY"
         ],
         "optional": [
             "MALUMAIL_API_KEY",

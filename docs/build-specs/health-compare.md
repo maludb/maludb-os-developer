@@ -19,11 +19,11 @@ column only to a role with `SELECT` on it), `fk_graph`, `archiver`, `relation_si
 
 ## Divergences from the design
 1. **A person's explanation of drift needs columns db/007 lacks.** `snapshot_objects.explained_by` admits `change_set`, `migration_draft`,
-   `grants`, `none`; `drift_explain` needs **`person`** and the note and who. **The planning model's additive migration** widens the check
+   `grants`, `none`; `drift_explain` needs **`person`** and the note and who. **db/013 (the Phase 1 fixes)** widens the check
    with `person` and appends `explained_note text` (≤ 500), `explained_member_id bigint`, `explained_at timestamptz`. The `snapshot_object`
    param is the triple (`snapshot_id`, address) the page carries.
 2. **Diagram layouts keep positions in `tables`.** `diagram_layouts.tables` holds `[{address, x, y}]` (at most 60); the manifest's
-   `positions` param fills it. `detail` is `names`, `keys` or `columns` in the schema — **the manifest's `all` is the schema's `columns`**
+   `tables` param fills it. `detail` is `names`, `keys` or `columns` in the schema and the manifest alike
    (the handler maps it); `hops` is 1–4 in the form though the column admits 0–5.
 3. **The diagram's SVG is served as an image, not inlined.** `GET /diagrams/svg?…` answers `image/svg+xml` with `Content-Security-Policy:
    default-src 'none'; style-src 'unsafe-inline'` and `X-Content-Type-Options: nosniff`, shown through `<img>` (a script in an SVG never runs

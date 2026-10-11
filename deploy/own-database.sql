@@ -31,7 +31,7 @@ DECLARE f regprocedure;
 BEGIN
     FOR f IN
         SELECT p.oid::regprocedure FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
-         WHERE n.nspname = 'public' AND p.proname IN ('dx_door_policy', 'dx_door_run_open', 'dx_door_run_close',
+         WHERE n.nspname = 'public' AND p.proname IN ('dx_door_policy', 'dx_door_run_open', 'dx_door_run_close', 'dx_door_job_update',
                                                       'dx_door_statement_log', 'dx_door_usage_bump', 'dx_door_member_active')
     LOOP
         EXECUTE format('REVOKE ALL ON FUNCTION %s FROM PUBLIC', f);

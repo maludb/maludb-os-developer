@@ -10,7 +10,9 @@ users in, following the `maludb-os-integration` contract.
 ## State
 
 **Phase 0 complete (2026-10-11)** — the kit, the schema (db/001–011) and *the door* are built and proven (`tests/phase0/`,
-`tests/door/`, `tests/integration/`); Phase 1, the tool surface and the screens' specifications, awaits the owner's go. Five research reports are in [`docs/research/`](docs/research/):
+`tests/door/`, `tests/integration/`). **Phase 1 written (2026-10-11)** — the [MCP tool surface](docs/developer-mcp-tool-surface.md), the
+[action manifest](docs/developer-action-manifest.md), the schema completed (db/012–013), three build specs and eleven slice specs in
+[`docs/build-specs/`](docs/build-specs/), the [consistency record](docs/phase1-consistency.md) — awaiting the owner's approval. Five research reports are in [`docs/research/`](docs/research/):
 
 | Report | What it covers |
 |---|---|

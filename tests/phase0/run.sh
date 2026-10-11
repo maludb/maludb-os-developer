@@ -190,7 +190,7 @@ check "$(curl -s -o /dev/null -w '%{http_code}' -b "$TMP/jar26" "$APP/")" "302" 
 
 echo "== the worker, the ingest bridge, mail"
 php bin/worker.php >"$TMP/worker.out" 2>&1; check "$?:$(sql "select count(*) from activity_log where action = 'worker.pass' and source = 'cron'")" "0:1" "the worker runs a pass of stubs, logs worker.pass (source cron) and exits 0"
-check "$(php -r '$r = json_decode(file_get_contents($argv[1]), true); echo count($r["ran"] ?? []) . ":" . (isset($r["ran"]["key_usage_prune"]["pruned"]) ? "pruned" : "?") . ":" . ($r["ran"]["discovery"]["stub"] ?? "?") . ":" . ($r["ran"]["snapshots"]["stub"] ?? "?");' "$TMP/worker.out")" "13:pruned:slice 1:slice 8" "…thirteen passes: the key-usage prune real, the rest stubs naming their slice"
+check "$(php -r '$r = json_decode(file_get_contents($argv[1]), true); echo count($r["ran"] ?? []) . ":" . (isset($r["ran"]["key_usage_prune"]["pruned"]) ? "pruned" : "?") . ":" . ($r["ran"]["discovery"]["stub"] ?? "?") . ":" . ($r["ran"]["snapshots"]["stub"] ?? "?");' "$TMP/worker.out")" "14:pruned:slice 1:slice 8" "…fourteen passes: the key-usage prune real, the rest stubs naming their slice"
 if [ -x "$PY" ] && "$PY" -c 'import asyncpg, httpx' 2>/dev/null; then
   "$PY" mcp/activity_ingest.py >"$TMP/ingest.out" 2>&1; check "$?" "0" "the ingest bridge ships the log to MaluDB (fake) and advances its checkpoint"
   check "$(php -r '$first = json_decode(file(getenv("FAKE_MALUDB_LOG"))[0], true); echo array_key_first($first["payload"]) . "=" . $first["payload"]["application"] . ":" . $first["kind"];')" "application=developer:activity" "the payload names the application first (memory.md)"

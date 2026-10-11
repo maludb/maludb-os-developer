@@ -14,7 +14,7 @@ It replicates slice 1's object page (the CRUD exemplar): the same page shell, he
 `Databases › {datname} › {schema} › {family} › {name}`, tab bar, `?back=` handling and handler order. **Read slice 1's built files first.**
 
 Door calls (the-door.md's named library, as `developer_meta`, counted not rowed): `object_ddl`, `object_describe`, `table_describe`,
-`object_dependencies`, `impact`, `fk_graph`, `object_privileges`, `role_list`, `role_describe`, `object_statistics`, `column_statistics`
+`object_dependencies`, `impact`, `fk_graph`, `object_privileges`, `roles`, `role_describe`, `object_statistics`, `column_statistics`
 (read tier — `pg_stats` shows a column only to a role with `SELECT` on it), `relation_sizes`. PHP reads nothing of a target itself.
 
 ## Divergences from the design
@@ -90,7 +90,7 @@ Impact: `cascade` `text-bg-danger`, `restrict` `text-bg-warning`, `rewrite` `tex
 `danger-drop-cascade`.
 
 ## Requirements claimed
-MUSTs (17): R7, R8, R9, R10, R17, R63, R64, R65, R103, R105, T1, T2, T3, T4, T35, T43, S8
+MUSTs (18): R7, R8, R9, R10, R17, R63, R64, R65, R103, R105, T1, T2, T3, T4, T35, T43, S8, MR27
 
 (R8 with slice 1, whose object page carries the columns, constraints, indexes, triggers, policies and partitions tabs; R64's grant wizard
 ends in slice 4's Change review; R65's policy list is the object page's Policies tab and its editor is slice 4's form.)

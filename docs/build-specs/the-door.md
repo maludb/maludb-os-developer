@@ -57,25 +57,30 @@ a host, a port or a connection string** — the door computes everything else fr
 | Kind | Fields beyond the common ones | What it does | Tier | Slice |
 |---|---|---|---|---|
 | `ping` | — | answers `{status: ok, grammar, version}`; no member check | — | 2 |
-| `run` | `sql`, `params` (text values for `$1…$n` — a saved query's parameters; a one-statement script only, bound through the extended protocol) | typed SQL through the pipeline of §3 | read, read_masked, workbench, own | 3 |
+| `run` | `sql`, `params` (text values for `$1…$n` — a saved query's parameters; a one-statement script only, bound through the extended protocol), `change_set_id` and `stop_on_error` (a workbench change set applied through `run`, each item's outcome written back — slice 4) | typed SQL through the pipeline of §3 | read, read_masked, workbench, own | 3 |
 | `cancel` | `target_request_id` | cancels a run **the same caller** started (libpq cancel, `cancel_safe()`), answered beside the run — and a running maintenance job for its requester or any holder of `maintenance.run` | — | 3, 7 |
 | `named` | `name`, `params` | one query of the named library (§4), bound parameters only | meta (bloat: read_masked) | 1, 2, 7, 8 |
 | `memory` | `name`, `schema`, `params` | one query of the memory library (§5), on a `memory` target or on an `application` target's co-located memory schema (one of the policy's `target.memory_schemas`) | memory (`SET ROLE` the auditor inside) | 9 |
 | `explain` | `sql`, `options` {`analyze`, `buffers`, `verbose`, `settings`, `serialize`, `memory`, `generic`} | `EXPLAIN (FORMAT JSON, …)` of one statement (§3.7) | read_masked or the person's tier; workbench | 6 |
-| `classify` | `sql` | splits, parses, classifies; per statement the class, the node, the `AT_*` subtypes, the relations touched, the refusal a `run` would give — **nothing executes and no target connection is opened** | — | 4 |
+| `classify` | `sql` | splits, parses, classifies; per statement the class, the node, the `AT_*` subtypes, the relations touched, every string literal and comment text, the volatility of each called function, the refusal a `run` would give — **nothing executes and no target connection is opened** | — | 4 |
 | `lint` | `sql` | squawk 2.68.0 over the statements (`--pg-version=17 --reporter=json`, stdin, no file), its findings by statement | — | 4 |
-| `apply` | `change_set_id`, `items` | a grid change set (§6.1) | write | 5 |
-| `undo` | `change_set_id`, `images` | a change set's before-images (§6.2) | write | 5 |
+| `apply` | `change_set_id`, `items` | a grid change set (§6.1); an insert answers its new key (`RETURNING` the identity) so its undo can delete it | write | 5 |
+| `undo` | `change_set_id`, `images` | a change set's before-images (§6.2): an update restored, a delete re-inserted, an insert deleted by the key `apply` returned | write | 5 |
 | `workbench_create` | `title`, `source` (a target, or null for empty), `template` | the lifecycle (§6.3) and, with `source`, the schema clone (§6.4) — **a clone is this kind with a source, not a kind of its own** | rolemaker, ops | 4 |
 | `workbench_drop` | — (`datname` is the workbench) | drops the database and its role | rolemaker | 4 |
 | `workbench_reset` | — | a new password for the workbench's role (a super-admin's) | rolemaker | 4 |
 | `workbench_size` | — | `pg_database_size()` of every workbench, for the worker's quota pass | meta | 4 |
-| `rehearse` | `change_set_id`, `statements` | a throwaway clone, the statements measured (§6.5); refused under `is_eval` | rolemaker, ops, the clone's role | 4 |
+| `rehearse` | `change_set_id`, `statements` | a throwaway clone, the statements measured (§6.5) — and `objects: [{address, ddl_sha256}]`, the DDL the change produced, for the observed-applied check; refused under `is_eval` | rolemaker, ops, the clone's role | 4 |
 | `signal` | `pid`, `signal` (`cancel` or `terminate`) | `dx_signal(pid, kind)` in the tool's own database (§6.6) | ops | 7 |
 | `maintenance` | `job_id`, `operation`, `object` | starts one maintenance job (§6.7) and answers at once; the door's own thread runs it and reports through `dx_door_job_update()` | ops | 7 |
 | `snapshot` | — | the nightly snapshot pass of one target (§6.8) | meta | 8 |
 | `export` | `export_id`, `kind`, `sql` or `object`, `format` | `COPY (…) TO STDOUT` at the person's level into the export's file (§6.9) | read, read_masked | 3 |
 | `import` | `workbench`, `object`, `file`, `mapping`, `on_error` | `COPY … FROM STDIN` into a workbench table (§6.10) | workbench | 4 |
+| `grid_page` | `object`, `columns[]` (the readable ones), `filters[]` ({column, operator, value} — values bound), `where` (raw, parsed and screened as a `read`), `sort`, `limit` (≤ 200), `offset` | one page of a table at the person's level; the generated SQL returned beside the rows; `xmin` and the identity selected for each row | read, read_masked | 5 |
+| `row_get` | `object`, `key` | one row by its identity, every readable column, and the rows referencing it grouped by foreign key (counts and the first 20 keys) | read, read_masked | 5 |
+| `row_value` | `object`, `key`, `column` | one value in full (a long text, a `bytea` as a download stream) | read, read_masked | 5 |
+| `exact_count` | `object`, `filters[]`, `where` | `count(*)` under the screen's timeout, capped (said when it gave up) | read, read_masked | 5 |
+| `pick_rows` | `object`, `q`, `display_column`, `limit` (≤ 50), `offset` | the record picker over a referenced table: the identity and the display column, searched by `ILIKE` on the display column | read, read_masked | 5 |
 
 **The answer** (every kind): `{"status": "ok"|"refused"|"error"|"timeout"|"cancelled", "refusal_rule"?, "message"?, "run_id"?, …}` plus
 the kind's own fields (`statements[]` for `run`, `rows[]`/`columns[]`/`truncated` for `named` and `memory`, `plan` and `flags` for
@@ -217,6 +222,14 @@ a text cut by `track_activity_query_size` that does not parse reads `<not normal
 | `top_statements` | `pg_stat_statements` (in the tool's own database, covering the cluster) by total time, mean, calls, rows, I/O; `stats_since`; `not_installed` when absent | `datname`, `order`, `limit` (≤ 100) | 100 | `top_statements`, `statements` (7) |
 | `server_stats` | `pg_stat_io`, `pg_stat_checkpointer`, `pg_stat_wal`, the predefined roles the meta login holds (what is hidden, T21) | — | 500 | `server` (7) |
 | `archiver` | `archive_mode`, `archive_command` set or not (never its text), `pg_stat_archiver` | — | 1 | `backup_posture`, `backups` (8) |
+| `object_statistics` | a table's or an index's size, estimate, scans, tuples inserted/updated/deleted, dead tuples, last (auto)vacuum and analyze (`pg_stat_user_tables`, `pg_stat_user_indexes`, `pg_statio_*`) | `type`, `identity` | 50 | `object-statistics` (2) |
+| `column_statistics` | `pg_stats` for a relation's columns: null fraction, distinct, correlation — **run as `developer_read_masked`**, which sees the statistics of the columns it may read (most-common values are never selected) | `schema`, `name` | 1,600 | `object-statistics` (2) |
+| `object_ddl_batch` | `object_ddl` for up to 200 addresses in one request | `objects[]` | 200 | a draft's verify block, compare's per-object diff (4, 8) |
+| `type_resolve` | `to_regtype()` / `to_regtypemod()` of a typed type name, its category and whether it is an enum, domain or range | `type_text` | 1 | the forms' type fields (4) |
+| `type_change_rewrites` | whether `ALTER COLUMN … TYPE` from one type to another is binary-coercible (`pg_cast` with `castmethod = 'b'`, varchar length growth) — the rule table's "rewrite: depends" resolved | `from_type`, `to_type` | 1 | `ddl_cost`, Change review's annotations (4) |
+| `migration_ledger` | the highest number in an application's `schema_migrations` where it keeps one — **run as `developer_read_masked`** (the grants service grants it like any table) | — | 1 | a draft's `NNN` (4) |
+| `table_identity` | a table's primary key, or a unique key whose columns are all NOT NULL — the grid's editable identity | `schema`, `name` | 10 | the grid, the row page (5) |
+| `table_write_effects` | the tables a table's triggers and `ON DELETE/UPDATE CASCADE | SET NULL | SET DEFAULT` foreign keys may write — the grid refuses such a table up front and the worker keeps `target_databases.side_effect_tables` | `schema`, `name` | 200 | the grid (5), the catalog index pass (1) |
 
 **What the named library never does**: read a row of a target's table; read `pg_authid`; name a column of a table outside `pg_catalog`
 and `information_schema` except through the statistics views; call a function on the deny-list.

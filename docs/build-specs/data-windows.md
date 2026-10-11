@@ -22,7 +22,7 @@ named queries `table_identity` (the primary key or a NOT NULL unique key), `tabl
 
 ## Divergences from the design
 1. **The staged values need a column: `change_set_items.payload jsonb`** — `{op, schema, table, key, xmin, values}` (the changed columns
-   only). db/010 has no such column; **the planning model's additive migration appends it** (never exposed by `mcp_change_set_items`, which
+   only). db/010 has no such column; **db/013 (the Phase 1 fixes) appends it** (never exposed by `mcp_change_set_items`, which
    lists its columns by name; the before-images and the payload are the only stored values, both kept `undo_days` and both behind no read
    role). The item's `statement` keeps the display text with `$n` placeholders.
 2. **Undo covers inserts and deletes, not only updates.** The door's Phase 0 `undo` reverses UPDATEs alone, and an insert's image has no
@@ -34,7 +34,7 @@ named queries `table_identity` (the primary key or a NOT NULL unique key), `tabl
    The grid therefore: (a) **refuses deletes up front** on a table referenced by a foreign key with `ON DELETE CASCADE`, `SET NULL` or `SET
    DEFAULT` ("deleting here would change {tables} — use a migration"), and updates of a key column referenced with `ON UPDATE CASCADE`; (b)
    **names a table's user triggers** in the pending bar ("Apply refuses if a trigger writes to another table"); (c) after a refusal for side
-   effects, keeps the table's address in **`target_databases.side_effect_tables text[]`** (appended by the same additive migration as Divergence 1) so the grid says it up front next time. The
+   effects, keeps the table's address in **`target_databases.side_effect_tables text[]`** (appended by db/013, the Phase 1 fixes) so the grid says it up front next time. The
    door's `pg_stat_xact_user_tables` delta check at Apply is unchanged.
 4. **No transaction spans requests** (R45): the only state that does is the staged change set, always visible in the pending bar.
 

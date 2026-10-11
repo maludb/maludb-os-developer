@@ -27,7 +27,7 @@ open window.
    holders) with kind `advisor_note`. The summary to the kernel's Sysadmin agent is the agent's own `message_send` — a kernel tool, not this
    application's.
 2. **The blocked-session threshold is ten minutes, fixed in v1** (design §5's words). `dx_settings` has no column for it; a setting is
-   proposed to the planning model (`blocked_alert_minutes`, a db/013 append) and the code reads `dx_setting_int('blocked_alert_minutes')` with
+   proposed to the planning model (`blocked_alert_minutes`, appended by db/013, the Phase 1 fixes) and the code reads `dx_setting_int('blocked_alert_minutes')` with
    10 as its fallback once it exists.
 3. **The export file is made by slice 3** (the worker's `export_jobs` pass and `export_make`). This slice builds the list, the one-time
    download door, `export_delete` and the purge in the `retention` pass.

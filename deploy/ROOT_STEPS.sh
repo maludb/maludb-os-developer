@@ -46,7 +46,8 @@ if [ "$DO_BEFORE" = 1 ]; then
 # 0. PIN THE PORTS AND THE DOOR'S KEYS in config/.env before the installer's first apply (Help Desk's lesson of 2026-10-02: the installer
 #    otherwise takes the first free port from 8100). DX_DOOR_SOCKET and DX_DOOR_KEY are required by maludb-os.json and the installer knows
 #    no value for them; DX_DOOR_KEY (the HMAC every request to the door carries, design §6.1) is made here once — the same key goes into
-#    the door's own environment file in step 6.
+#    the door's own environment file in step 6. DX_BRIDGE_KEY (the HMAC of the records server's loopback bridge to PHP's DDL generators,
+#    docs/build-specs/ddl-generators.md) is made here once too.
 echo "== 0. Pin the ports and the door's keys in $ENVF"
 if [ ! -f "$ENVF" ]; then
   KEY=$( [ "$REAL" = 1 ] && head -c 32 /dev/urandom | od -An -tx1 | tr -d ' \n' || echo '<64 hex>')
@@ -54,7 +55,8 @@ if [ ! -f "$ENVF" ]; then
   echo "+ write APP_INTERNAL_PORT=8201, MCP_RECORDS_PORT=8858, MCP_ACTIVITY_PORT=8859, DX_DOOR_SOCKET=/run/developer/door.sock, DX_DOOR_KEY=(new) → $ENVF"
   if [ "$REAL" = 1 ]; then
     umask 027
-    printf 'APP_INTERNAL_PORT=8201\nMCP_RECORDS_PORT=8858\nMCP_ACTIVITY_PORT=8859\nDX_DOOR_SOCKET=/run/developer/door.sock\nDX_DOOR_KEY=%s\n' "$KEY" > "$ENVF"
+    BKEY=$(head -c 32 /dev/urandom | od -An -tx1 | tr -d ' \n')
+    printf 'APP_INTERNAL_PORT=8201\nMCP_RECORDS_PORT=8858\nMCP_ACTIVITY_PORT=8859\nDX_DOOR_SOCKET=/run/developer/door.sock\nDX_DOOR_KEY=%s\nDX_BRIDGE_KEY=%s\n' "$KEY" "$BKEY" > "$ENVF"
     umask 022
   fi
 else
@@ -67,6 +69,10 @@ else
     KEY=$( [ "$REAL" = 1 ] && head -c 32 /dev/urandom | od -An -tx1 | tr -d ' \n' || echo x)
     envset DX_DOOR_KEY "$KEY" '(new, 64 hex — never printed)'
   else echo "   DX_DOOR_KEY already set (kept)"; fi
+  if [ -z "$(envval DX_BRIDGE_KEY)" ]; then
+    BKEY=$( [ "$REAL" = 1 ] && head -c 32 /dev/urandom | od -An -tx1 | tr -d ' \n' || echo x)
+    envset DX_BRIDGE_KEY "$BKEY" '(new, 64 hex — never printed)'
+  else echo "   DX_BRIDGE_KEY already set (kept)"; fi
 fi
 #    See that it worked:  php $KERNEL/bin/app_install.php plan $APP | grep -E '^(todo|done) +(ports|vhost|services)'   -> no {{...}} unfilled
 
@@ -115,6 +121,8 @@ echo "== 3. config/ and config/.env → group developer (0750 / 0640); storage/ 
 if [ -d "$APP/config" ]; then run chgrp developer "$APP/config"; run chmod 0750 "$APP/config"; fi
 if [ -f "$ENVF" ]; then run chgrp developer "$ENVF"; run chmod 0640 "$ENVF"; fi
 if [ -d "$APP/storage" ]; then run chown -R developer-web:developer "$APP/storage"; run chmod 2770 "$APP/storage"; fi
+# storage/exports and storage/imports are the door's (it writes an export's file and reads an upload — the-door.md §6.9–6.10): developer-door, setgid developer.
+for d in exports imports; do run install -d -o developer-door -g developer -m 2770 "$APP/storage/$d"; done
 
 # ------------------------------------------------------------------------------------------------------------------------------------
 # 4. THE CLUSTER ROLES AND THEIR PASSFILES (idempotent; design §6.1's table). None is a superuser; none holds BYPASSRLS itself or the
@@ -308,6 +316,8 @@ if [ "$DO_AFTER" = 1 ]; then
 echo "== 11. (after apply) config/.env and storage/ back to the group developer"
 if [ -f "$ENVF" ]; then run chgrp developer "$APP/config" "$ENVF"; run chmod 0750 "$APP/config"; run chmod 0640 "$ENVF"; fi
 if [ -d "$APP/storage" ]; then run chown -R developer-web:developer "$APP/storage"; fi
+# storage/exports and storage/imports are the door's (it writes an export's file and reads an upload — the-door.md §6.9–6.10): developer-door, setgid developer.
+for d in exports imports; do run install -d -o developer-door -g developer -m 2770 "$APP/storage/$d"; done
 run systemctl try-restart developer-records-mcp developer-activity-mcp php8.3-fpm
 # The installer enables every listed unit but a .socket (its filter keeps only timers and services without a timer); the door's service
 # Requires= its socket, so it starts with it — enabling the socket too makes it come up at boot on its own.

@@ -16,15 +16,15 @@ declare(strict_types=1);
  *
  * PHASE 0: every pass but `key_usage_prune` is a STUB that changes nothing and answers 0 — the slice whose data it touches fills it in
  * (design §10): `discovery`, `catalog_index` slice 1's; `workbench_expiry`, `applied_drafts` slice 4's; `window_expiry`, `undo_prune`
- * slice 5's; `maintenance_jobs` slice 7's; `snapshots` slice 8's; `export_jobs`, `notify_outbox`, `advisor_inputs`, `retention` slice
- * 10's. Each stub names its slice. REAL from the kit: `key_usage_prune` (dx_prune_key_usage, db/005).
+ * slice 5's; `maintenance_jobs` slice 7's; `snapshots` slice 8's; `export_jobs` slice 3's; `imports` slice 4's; `notify_outbox`,
+ * `advisor_inputs`, `retention` slice 10's. Each stub names its slice. REAL from the kit: `key_usage_prune` (dx_prune_key_usage, db/005).
  */
 if (PHP_SAPI !== 'cli') { fwrite(STDERR, "CLI only.\n"); exit(1); }
 require_once dirname(__DIR__) . '/app/bootstrap.php';
 
 /** The passes, in the order they run. A new pass is a name here and a function worker_pass_<name>(PDO, int $limit, DateTimeImmutable $now): array. */
 const WORKER_PASSES = ['discovery', 'catalog_index', 'window_expiry', 'workbench_expiry', 'applied_drafts', 'maintenance_jobs', 'export_jobs',
-    'snapshots', 'undo_prune', 'notify_outbox', 'advisor_inputs', 'retention', 'key_usage_prune'];
+    'imports', 'snapshots', 'undo_prune', 'notify_outbox', 'advisor_inputs', 'retention', 'key_usage_prune'];
 
 $only = [];
 $limit = 200;
@@ -92,7 +92,9 @@ function worker_pass_applied_drafts(PDO $pdo, int $limit, DateTimeImmutable $now
 /** SLICE 7 — maintenance jobs: VACUUM, ANALYZE, REINDEX CONCURRENTLY, REFRESH … CONCURRENTLY run through the door (its ops tier), progress from pg_stat_progress_*. */
 function worker_pass_maintenance_jobs(PDO $pdo, int $limit, DateTimeImmutable $now): array { return ['ran' => 0, 'stub' => 'slice 7']; }
 /** SLICE 10 — export jobs: COPY … TO STDOUT through the door at the maker's level, formula injection neutralised, the file kept export_keep_hours. */
-function worker_pass_export_jobs(PDO $pdo, int $limit, DateTimeImmutable $now): array { return ['made' => 0, 'stub' => 'slice 10']; }
+function worker_pass_export_jobs(PDO $pdo, int $limit, DateTimeImmutable $now): array { return ['made' => 0, 'stub' => 'slice 3']; }
+/** SLICE 4 — CSV imports into a workbench: the queued upload loaded through the door's `import` (COPY … FROM STDIN), its change set's outcome written. */
+function worker_pass_imports(PDO $pdo, int $limit, DateTimeImmutable $now): array { return ['loaded' => 0, 'stub' => 'slice 4']; }
 /** SLICE 8 — nightly snapshots of application, kernel and own targets (normalized DDL per object); drift: each change attributed or marked unexplained. */
 function worker_pass_snapshots(PDO $pdo, int $limit, DateTimeImmutable $now): array { return ['taken' => 0, 'stub' => 'slice 8']; }
 /** SLICE 5 — before-images older than undo_days dropped (the undo window closed). */

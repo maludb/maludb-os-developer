@@ -67,6 +67,17 @@ SELECT pg_temp.refused($$INSERT INTO dba_notes (author_member_id, title, body) V
 SELECT pg_temp.refused($$INSERT INTO dba_notes (author_member_id, title, body) VALUES (28, 'x', 'y')$$, 'role does not let', 'nor a person sent no roles');
 SELECT pg_temp.refused($$INSERT INTO dba_notes (author_member_id, title, body, change_set_ids) VALUES (42, 'x', 'y', '{999999}')$$, 'does not exist', 'a note names only change sets that exist');
 
+-- ================================================================ db/013 the Phase 1 fixes
+SELECT pg_temp.check((dx_door_policy(26, NULL, 'subello_gl') -> 'target') ?& ARRAY['has_maludb', 'memory_schemas'], 'the door''s policy names a target''s co-located memory (has_maludb, memory_schemas)');
+INSERT INTO maintenance_jobs (target_database_id, operation, obj_type, obj_names, lock_note, requested_by)
+SELECT id, 'analyze', 'table', '{public,invoices}', 'SHARE UPDATE EXCLUSIVE', 30 FROM target_databases WHERE datname = 'subello_gl';
+SELECT dx_door_job_update((SELECT max(id) FROM maintenance_jobs), '{"status": "running", "progress": {"phase": "scanning heap"}}');
+SELECT dx_door_job_update((SELECT max(id) FROM maintenance_jobs), '{"status": "ok"}');
+SELECT pg_temp.check((SELECT status = 'ok' AND started_at IS NOT NULL AND finished_at IS NOT NULL FROM maintenance_jobs ORDER BY id DESC LIMIT 1), 'the door reports a job running, then done');
+SELECT pg_temp.refused($$SELECT dx_door_job_update((SELECT max(id) FROM maintenance_jobs), '{"status": "running"}')$$, 'No queued or running job', '…a finished job takes no more reports');
+SELECT pg_temp.check((SELECT blocked_alert_minutes FROM dx_settings) = 10, 'the blocked-session threshold is a setting (10 minutes)');
+SELECT pg_temp.check(NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'mcp_change_set_items' AND column_name = 'payload'), 'a staged edit''s values never reach the records role''s view');
+
 -- ================================================================ the visible targets, as developer_records_ro
 SELECT pg_temp.as_reader('developer_records_ro', 26);
 SELECT pg_temp.check((SELECT array_agg(datname ORDER BY datname) FROM mcp_visible_targets) = ARRAY['certstudy', 'certstudy_memory', 'dxw_1', 'hr_dev', 'subello_gl'],

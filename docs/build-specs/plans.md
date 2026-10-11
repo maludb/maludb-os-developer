@@ -22,7 +22,7 @@ Schema (db/009, 012, never modified): `explain_plans` (member, target, run, SQL,
 3. **Plans are their maker's**: `mcp_explain_plans` shows the caller's own; there is no shared plan in version 1 (to share, copy the JSON).
    The surface's "own or shared plan" for `get_plan` reads "own" (reported).
 4. **`plan_delete` needs `DELETE` on `explain_plans` for `developer_rw`**, which db/009 does not grant — this slice's migration
-   (`db/0NN_plans.sql`, the next free number) grants it and nothing else (reported).
+   db/013 (the Phase 1 fixes) grants it.
 
 ## Who may do what
 | Action / screen | Right | Rule |
@@ -50,7 +50,7 @@ back"*) and posts `plan_explain` for the statement at the cursor; the answer lan
 - `client/plan/{index.ts}` with `pev2` and `vue` pinned exactly in `client/package.json` (a PEV2 release at or after the fix of its 1.22 HTML
   injection — read its changelog when pinning), built by `client/build.mjs` into `html/assets/developer/{plan.js,plan.css}` and recorded in
   `html/assets/developer/manifest.json`; `bin/check_bundle.php` covers it
-- `db/0NN_plans.sql` — `GRANT DELETE ON explain_plans TO developer_rw;` (the next free number when the slice is built)
+- no migration: `GRANT DELETE ON explain_plans TO developer_rw` is db/013's (the Phase 1 fixes)
 - `tests/phase3/slice6/{run.sh,lib.php,explain.php,flags.php,flags_parity.py,json.php,browser.mjs}` and fixture plans
   `tests/phase3/slice6/plans/*.json` (each flag at least once, captured from the proof's own targets)
 

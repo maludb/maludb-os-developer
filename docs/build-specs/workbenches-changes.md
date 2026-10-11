@@ -17,13 +17,13 @@ database function or the door's client → `log_activity()` → `emit_action_sta
 Schema (db/010, db/012, never modified here except by an additive migration the planning model writes): `workbenches`, `change_sets`,
 `change_set_items`, `rehearsals`, `migration_drafts`, the trigger `dx_change_sets_before()`; `mcp_workbenches`, `mcp_change_sets`,
 `mcp_change_set_items`, `mcp_rehearsals`, `mcp_migration_drafts`. The door: `workbench_create`, `workbench_drop`, `workbench_reset`,
-`rehearse`, `run` (a workbench's change set), `classify`, `lint`, `import_csv`, and the named queries `object_ddl`, `relation_sizes`,
+`rehearse`, `run` (a workbench's change set), `classify`, `lint`, `import`, and the named queries `object_ddl`, `relation_sizes`,
 `type_resolve`, `type_change_rewrites`, `blocking`, `migration_ledger`.
 
 ## Divergences from the design
 1. **CSV import runs in the worker, not in the request** (R102, T24): `workbench_import` stores the uploaded file under
    `storage/imports/{change_set_id}.csv` (0600, the web user's), records a change set (origin `import`, the one item `COPY … FROM STDIN`,
-   state `reviewed`) and the worker's new pass **`imports`** applies it through the door's `import_csv` as the owner (`app.member_id` = the
+   state `reviewed`) and the worker's new pass **`imports`** applies it through the door's `import` as the owner (`app.member_id` = the
    owner — the trigger's "applied by the person acting"), then deletes the file. The page polls the change set's state. **bin/worker.php gains
    the `imports` pass** (the fourteenth).
 2. **A workbench's `kind = clone` needs the source's grants in place** (the door refuses a source whose `grants_state` is not `in_place` or

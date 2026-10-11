@@ -39,13 +39,13 @@
   target or an object, on `#page-content` — so "what depends on this", "explain this", "draft an index for this" resolve against the page
   the person is on. The editor also stamps the statement at the cursor's position (`data-sql-at`, never the whole script) for the command bar.
 - **Doors that are not screens** have no row here:
-  - `GET /sql/runs/{id}/poll` — a running statement's status every second, with the Cancel button's state (slice 3);
+  - `GET /sql/runs/poll?request=` — a running statement's status every second by the request id the page minted (the run's row exists only once the door opens it), with the Cancel button's state (slice 3);
   - `GET /db/{datname}/complete.json` — the editor's completion map from the catalog index, only what the person may read (slice 3);
   - `GET /db/{datname}/o/{address}/data/rows?page=` — the grid's page partial (slice 5); `GET /db/{datname}/o/{address}/rows/{key}/value?column=`
     — one long or binary value in full, at the person's level (slice 5);
   - `GET /sessions/poll?datname=` — the activity screen's 5-second refresh (slice 7); `GET /maintenance/{id}/progress` and
     `GET /rehearsals/{id}/progress` — progress by polling (slices 7, 4);
-  - `GET /drafts/{id}/download` — the draft as `NNN_<slug>.sql` (slice 4); `GET /exports/{id}/download` — once, to its maker (slice 10);
+  - `GET /drafts/{id}/download` — the draft as `NNN_<slug>.sql` (slice 4); `GET /exports/{id}/download` — once, to its maker (slice 3, which makes exports; slice 10 lists them);
   - `GET /plans/{id}/json` — "Copy JSON", the plan's only export (slice 6); `GET /diagrams/svg?…` — the Graphviz SVG (slice 8);
   - `GET /pick/{table}` — the record picker over a referenced table (slice 5) and over members (slice 1); `/sso`, `/sso/logout`,
     `/api/v1/health`.
@@ -138,8 +138,8 @@ Actions (base `/admin/registry/`, access under `/admin/access/`):
 | `access_revoke` | `/admin/access/revoke.php` | **access** (the access row) | access_grant | ✔ | | `access.revoke` | access.manage | people | the access row |
 | `classification_confirm` | `/classify/confirm.php` | **target**, **object** (a column address), **class** (secret or personal or none), kind (email or phone or name or address or birth_date or national_id or payment_card or bank_account or ip_address or free_text or compensation or health or other) | restore prior | ✔ | | `classification.confirm` | classifications.confirm (a secret pattern cleared by a super-admin only) | people | the classification |
 | `catalog_refresh` | `/catalog/refresh.php` | **target** | — | | | `catalog.refresh` | catalog.read | people | the target |
-| `favourite_add` | `/favourites/add.php` | **target**, **object** | favourite_remove | | | `favourite.add` | catalog.read | people | the favourite |
-| `favourite_remove` | `/favourites/remove.php` | **favourite** | favourite_add | | | `favourite.remove` | own | people | the favourite |
+| `favourite_add` | `/favourites/add.php` | **target**, **object** | favourite_remove | | | `favourite.add` | catalog.read | people | the address |
+| `favourite_remove` | `/favourites/remove.php` | **target**, **object** | favourite_add | | | `favourite.remove` | own | people | the address |
 
 ## Structure, DDL and dependencies (slice 2)
 
@@ -193,7 +193,7 @@ Screens:
 | `workbenches-list` | `/workbenches` | the workbenches: mine, and every workbench for an admin — cloned from what, size against quota, expiring when |
 | `workbench-add` | `/workbenches/new` | a new workbench: empty or a schema-only clone of a database I may see (params: `source`, `title`) |
 | `workbench-view` | `/workbenches/{id}` | one workbench: its change log, renew, export as a migration, import a CSV, reset its credential, drop |
-| `workbench-import` | `/workbenches/{id}/import` | to load a CSV into a workbench table: the preview, the column mapping, ON_ERROR for type errors |
+| `workbench-import` | `/workbenches/{id}/import` | (the same file answers `workbench_import`'s POST) to load a CSV into a workbench table: the preview, the column mapping, ON_ERROR for type errors |
 | `change-form` | `/forms/{datname}/{family}/{verb}` | a form to create, alter or drop a schema, table, column, constraint, index, view, materialized view, sequence, function, procedure, trigger, type, domain, enum, policy or comment — submit is Review (params: `object`, `safe`) |
 | `changes-list` | `/changes` | the change log: change sets proposed, reviewed, rehearsed, applied, drafted, discarded or failed (params: `datname`, `state`, `origin`, `author`) |
 | `change-review` | `/changes/{id}` | Change review: the SQL, each statement's lock, rewrite and scan with its source, lint, the literals list, Rehearse, the one button the class allows |
@@ -213,7 +213,7 @@ Actions (base `/changes/`, workbenches under `/workbenches/`, drafts under `/dra
 | `workbench_import` | `/workbenches/import.php` | **workbench**, **object** (a table address), **file** (a CSV upload), mapping[] (column to field), on_error (stop or ignore) | — | | | `workbench.import` | owner and workbench.apply | people | the workbench |
 | `workbench_export` | `/workbenches/export.php` | **workbench**, from_change_set, to_change_set | migration_draft_withdraw | | | `workbench.export` | owner and migrations.draft | people | the draft |
 | `change_set_prepare` | `/changes/prepare.php` | **target**, **family**, **verb** (create or alter or drop or truncate), object, fields[] (the form's fields), safe (yes or no) | change_set_discard | | | `change_set.prepare` | changes.prepare | people | the change set |
-| `change_set_propose` | `/changes/propose.php` | **target**, **title** (up to 120 characters), **sql** (the statements), reason, origin (editor or health_fix or agent_proposal) | change_set_discard | | | `change_set.propose` | changes.prepare | yes | the change set |
+| `change_set_propose` | `/changes/propose.php` | **target**, **title** (up to 120 characters), **sql** (the statements), reason, origin (editor or health_fix — an agent's is always recorded as agent_proposal) | change_set_discard | | | `change_set.propose` | changes.prepare | yes | the change set |
 | `change_set_update` | `/changes/update.php` | **change_set**, title, sql (the statements — a draft only) | restore prior | | | `change_set.update` | own | people | the change set |
 | `change_set_review` | `/changes/review.php` | **change_set** | — | | | `change_set.review` | changes.prepare | people | the change set |
 | `change_set_override` | `/changes/override.php` | **item**, **rule** (the lint rule), **reason** (up to 500 characters) | — | | | `change_set.override` | changes.prepare | people | the change set |
@@ -222,7 +222,7 @@ Actions (base `/changes/`, workbenches under `/workbenches/`, drafts under `/dra
 | `change_set_discard` | `/changes/discard.php` | **change_set** | — | ✔ | | `change_set.discard` | own or changes.prepare | people | the change set |
 | `migration_draft_create` | `/drafts/save.php` | **change_set** (rehearsed), file_number (the application's next number if known), slug (lowercase words joined by underscores) | migration_draft_withdraw | | | `migration_draft.create` | migrations.draft | yes | the draft |
 | `migration_draft_update` | `/drafts/update.php` | **draft**, file_number, slug, notes | restore prior | | | `migration_draft.update` | migrations.draft | people | the draft |
-| `migration_draft_withdraw` | `/drafts/withdraw.php` | **draft**, reason | — | ✔ | | `migration_draft.withdraw` | own or migrations.draft | people | the draft |
+| `migration_draft_withdraw` | `/drafts/withdraw.php` | **draft**, reason (the draft becomes abandoned) | — | ✔ | | `migration_draft.withdraw` | own or migrations.draft | people | the draft |
 
 ## Data: the grid, the row page, change sets of rows and windows (slice 5)
 
@@ -321,7 +321,7 @@ Actions (base `/health/`, history under `/history/`, diagrams under `/diagrams/`
 | `health_fix_prepare` | `/health/fix.php` | **target**, **finding** (a finding's key) | change_set_discard | | | `health.fix_prepare` | changes.prepare | people | the change set |
 | `drift_explain` | `/history/explain.php` | **snapshot_object** (a change in a snapshot), **note** (up to 500 characters) | restore prior | | | `drift.explain` | maintenance.run | people | the snapshot object |
 | `snapshot_take` | `/history/snapshot.php` | **target** | — | | | `snapshot.take` | maintenance.run | people | the snapshot |
-| `diagram_layout_save` | `/diagrams/save.php` | **target**, **title** (up to 80 characters), **start** (a table address), hops (1 to 4), detail (names or keys or all), positions (the layout's JSON) | diagram_layout_delete | | | `diagram_layout.save` | catalog.read | people | the layout |
+| `diagram_layout_save` | `/diagrams/save.php` | **target**, **title** (up to 80 characters), **start** (a table address), hops (1 to 4), detail (names or keys or columns), tables (the layout's JSON — each table's address and position) | diagram_layout_delete | | | `diagram_layout.save` | catalog.read | people | the layout |
 | `diagram_layout_delete` | `/diagrams/delete.php` | **layout** | — | ✔ | | `diagram_layout.delete` | own | people | the layout |
 
 ## The memory section (slice 9)
@@ -377,6 +377,6 @@ Actions (base `/notifications/`, notes under `/notes/`, exports under `/exports/
 | `notification_read_all` | `/notifications/read-all.php` | — | — | | | `notification.read_all` | own | people | none |
 | `notification_prefs_save` | `/notifications/prefs.php` | kinds[] (the notices I want), texts (yes or no — K6 texts for urgent notices) | restore prior | | | `notification.prefs_save` | own | people | none |
 | `dispatch_retry` | `/admin/dispatches/retry.php` | **dispatch** | — | | | `dispatch.retry` | settings.manage | people | the dispatch |
-| `settings_save` | `/admin/settings/save.php` | screen_timeout_seconds, workbench_timeout_seconds, show_rows, show_bytes_mb, cell_chars, runs_per_person, grid_page_rows, window_default_minutes, window_max_minutes, change_set_confirm_rows, change_set_max_rows, backup_max_age_hours, undo_days, workbench_quota_gb, workbench_expiry_days, workbenches_per_person, sql_text_days, audit_keep_days, export_max_rows, export_max_mb, export_keep_hours | restore prior | ✔ | | `settings.save` | settings.manage | people | none |
+| `settings_save` | `/admin/settings/save.php` | idle_timeout_minutes, step_up_minutes, blocked_alert_minutes, snapshot_ddl_days, screen_timeout_seconds, workbench_timeout_seconds, show_rows, show_bytes_mb, cell_chars, runs_per_person, grid_page_rows, window_default_minutes, window_max_minutes, change_set_confirm_rows, change_set_max_rows, backup_max_age_hours, undo_days, workbench_quota_gb, workbench_expiry_days, workbenches_per_person, sql_text_days, audit_keep_days, export_max_rows, export_max_mb, export_keep_hours | restore prior | ✔ | | `settings.save` | settings.manage | people | none |
 | `freeze_on` | `/admin/freeze/on.php` | **reason** (up to 500 characters) | freeze_off | ✔ | | `freeze.on` | freeze | people | none |
 | `freeze_off` | `/admin/freeze/off.php` | — | freeze_on | ✔ | | `freeze.off` | freeze | people | none |

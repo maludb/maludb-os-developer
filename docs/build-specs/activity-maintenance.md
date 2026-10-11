@@ -19,7 +19,7 @@ Door: kinds `named` (`activity`, `blocking`, `locks`, `session_text`, `progress`
 ## Divergences from the design
 1. **Maintenance jobs run on the door's own thread**, not in the worker's process (a VACUUM of a large table would hold the minute timer for
    its whole length): the worker's `maintenance_jobs` pass hands a queued job to the door (`door_ask('maintenance', …)`), which answers at
-   once and reports through **`dx_door_job_update(job_id bigint, p jsonb)`** — this slice's migration `db/0NN_maintenance_jobs.sql` creates it
+   once and reports through **`dx_door_job_update(job_id bigint, p jsonb)`** — db/013 (the Phase 1 fixes) creates it
    (`SECURITY DEFINER`, `SET search_path = public, pg_temp`; it updates only `status`, `progress`, `started_at`, `finished_at`,
    `error_masked`, `query_run_id` of a job in `queued`/`running`; `EXECUTE` to `developer_meta` by `deploy/own-database.sql`'s `dx_door_*`
    loop). Reported to the planning model as a schema addition.
@@ -27,7 +27,7 @@ Door: kinds `named` (`activity`, `blocking`, `locks`, `session_text`, `progress`
    rendered once in the session's page — never a GET, never cached (`Cache-Control: no-store`).
 3. **The blocked-session dispatch is noticed here, delivered by slice 10**: the worker's `blocked_sessions` pass (every minute) writes one
    `agent_dispatches` row (kind `blocked_session`, the Advisor, the target, the root pid's fingerprint — never its text) and one
-   `dx_notify()` to each DBA per root blocker that has blocked others longer than `blocked_minutes` (10, a setting this slice's migration
+   `dx_notify()` to each DBA per root blocker that has blocked others longer than `blocked_alert_minutes` (10, a setting this slice's migration
    adds to `dx_settings` — reported); the same root is not dispatched again while it lasts. Slice 10 delivers dispatches and texts.
 4. **Statements live in the tool's own database**: `pg_stat_statements` is created there by the owner (ROOT_STEPS); one installation covers
    the cluster and the named query filters by `dbid`. Until it exists, `statements` says "The owner has not created pg_stat_statements yet".
@@ -64,7 +64,7 @@ Door: kinds `named` (`activity`, `blocking`, `locks`, `session_text`, `progress`
   summary,lock-row,limits-note}.php`, `app/views/maintenance/{index,form}.php` + `app/views/maintenance/partials/{job-row,progress,lock-note}.php`
 - the worker's `maintenance_jobs` pass (queued → the door; a running job past 24 h is reported to the DBAs) and a new `blocked_sessions` pass
   in `bin/worker.php`
-- `db/0NN_maintenance_jobs.sql` — `dx_door_job_update()`, the setting `blocked_minutes` (default 10); nothing else
+- no migration: `dx_door_job_update()` and the setting `blocked_alert_minutes` (default 10) are db/013's (the Phase 1 fixes)
 - `tests/phase3/slice7/{run.sh,lib.php,sessions.php,signals.php,locks.php,statements.php,maintenance.php,blocked.php,json.php,browser.mjs}`
 
 ## Query functions (signatures fixed)
@@ -131,4 +131,4 @@ MUSTs (18): R57, R58, R71, R72, R102, R103, T21, T22, T24, T27, T38, T42, E11, E
 3. **One running maintenance job per target**: a second waits queued.
 
 ## Open questions
-1. `blocked_minutes` (10) is this slice's setting; the owner may want a different threshold — it is in Admin → Settings (slice 10).
+1. `blocked_alert_minutes` (10) is this slice's setting; the owner may want a different threshold — it is in Admin → Settings (slice 10).

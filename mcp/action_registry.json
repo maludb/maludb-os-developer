@@ -1,6 +1,6 @@
 {
     "generated_from": "docs/developer-action-manifest.md",
-    "generated_at": "2026-10-11T18:53:08+00:00",
+    "generated_at": "2026-10-11T19:40:54+00:00",
     "screens": {
         "home": {
             "screen": "home",
@@ -354,7 +354,7 @@
             "screen": "workbench-import",
             "url": "/workbenches/{id}/import",
             "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
-            "when": "to load a CSV into a workbench table: the preview, the column mapping, ON_ERROR for type errors",
+            "when": "(the same file answers `workbench_import`'s POST) to load a CSV into a workbench table: the preview, the column mapping, ON_ERROR for type errors",
             "params": [],
             "built": false,
             "stub": false
@@ -1229,7 +1229,7 @@
             "log_event": "favourite.add",
             "who": "catalog.read",
             "agent": false,
-            "record_id": "the favourite",
+            "record_id": "the address",
             "built": false
         },
         "favourite_remove": {
@@ -1238,7 +1238,13 @@
             "endpoint": "/favourites/remove.php",
             "params": [
                 {
-                    "name": "favourite",
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "object",
                     "required": true,
                     "repeated": false,
                     "hint": ""
@@ -1250,7 +1256,7 @@
             "log_event": "favourite.remove",
             "who": "own",
             "agent": false,
-            "record_id": "the favourite",
+            "record_id": "the address",
             "built": false
         },
         "sql_run": {
@@ -1773,7 +1779,7 @@
                     "name": "origin",
                     "required": false,
                     "repeated": false,
-                    "hint": "editor or health_fix or agent_proposal"
+                    "hint": "editor or health_fix — an agent's is always recorded as agent_proposal"
                 }
             ],
             "undo": "change_set_discard",
@@ -2034,7 +2040,7 @@
                     "name": "reason",
                     "required": false,
                     "repeated": false,
-                    "hint": ""
+                    "hint": "the draft becomes abandoned"
                 }
             ],
             "undo": null,
@@ -2628,13 +2634,13 @@
                     "name": "detail",
                     "required": false,
                     "repeated": false,
-                    "hint": "names or keys or all"
+                    "hint": "names or keys or columns"
                 },
                 {
-                    "name": "positions",
+                    "name": "tables",
                     "required": false,
                     "repeated": false,
-                    "hint": "the layout's JSON"
+                    "hint": "the layout's JSON — each table's address and position"
                 }
             ],
             "undo": "diagram_layout_delete",
@@ -2854,6 +2860,30 @@
             "section": "Agents, exports, notifications, home and admin (slice 10)",
             "endpoint": "/admin/settings/save.php",
             "params": [
+                {
+                    "name": "idle_timeout_minutes",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "step_up_minutes",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "blocked_alert_minutes",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "snapshot_ddl_days",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
                 {
                     "name": "screen_timeout_seconds",
                     "required": false,
