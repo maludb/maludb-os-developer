@@ -72,14 +72,15 @@ INSERT INTO dx_rights (right_key, description, sort_order, held_by) VALUES
  ('maintenance.run',         'Run maintenance jobs: VACUUM, ANALYZE, REINDEX CONCURRENTLY, REFRESH MATERIALIZED VIEW CONCURRENTLY (people only)', 18, 'people'),
  ('classifications.confirm', 'Confirm or clear a column''s classification (a pattern-matched secret only a super-admin clears) (people only)', 19, 'people'),
  ('memory.content',          'Open the memory section''s content: subject pages, walks, paths, document, chat and note metadata, every view logged (people only)', 20, 'people'),
+ ('queries.verify',          'Verify a saved query — the badge drops by itself when its SQL changes (people only)', 21, 'people'),
  -- Developer admin — a super-admin's
- ('access.manage',           'Grant and revoke the masked and rows levels per person or role and database', 21, 'super_admins'),
- ('registry.manage',         'Classify databases, mark them private by design, colour and hide them', 22, 'super_admins'),
- ('window.approve',          'Approve or refuse another person''s window', 23, 'super_admins'),
- ('memory.reveal',           'Reveal an episode''s payload or a document''s text in the memory section, with a reason', 24, 'super_admins'),
- ('settings.manage',         'Run Developer: limits, caps, retention, expiry, personal tokens', 25, 'super_admins'),
- ('audit.read',              'Read every run, statement, window, unmask and reveal by anyone', 26, 'super_admins'),
- ('freeze',                  'Freeze the tool: end every window, refuse the write and workbench tiers, stop every agent tool, close the door''s connections', 27, 'super_admins');
+ ('access.manage',           'Grant and revoke the masked and rows levels per person or role and database', 22, 'super_admins'),
+ ('registry.manage',         'Classify databases, mark them private by design, colour and hide them', 23, 'super_admins'),
+ ('window.approve',          'Approve or refuse another person''s window', 24, 'super_admins'),
+ ('memory.reveal',           'Reveal an episode''s payload or a document''s text in the memory section, with a reason', 25, 'super_admins'),
+ ('settings.manage',         'Run Developer: limits, caps, retention, expiry, personal tokens', 26, 'super_admins'),
+ ('audit.read',              'Read every run, statement, window, unmask and reveal by anyone', 27, 'super_admins'),
+ ('freeze',                  'Freeze the tool: end every window, refuse the write and workbench tiers, stop every agent tool, close the door''s connections', 28, 'super_admins');
 
 INSERT INTO dx_roles (role_key, name, description, capability, is_admin, sort_order) VALUES
  ('viewer',   'Viewer',          'Reads every registered database''s structure — objects, DDL, dependencies, plans without running them, activity, health and the memory databases'' state. No rows.', 'read', false, 1),
@@ -95,7 +96,8 @@ SELECT 'engineer', r FROM unnest(ARRAY['catalog.read','plans.explain','activity.
 UNION ALL
 SELECT 'dba', r FROM unnest(ARRAY['catalog.read','plans.explain','activity.read','health.read','memory.read',
     'data.read','queries.save','workbench.use','workbench.apply','changes.prepare','migrations.draft','exports.make',
-    'data.unmask','window.request','data.write','sessions.cancel','sessions.terminate','maintenance.run','classifications.confirm','memory.content']) r
+    'data.unmask','window.request','data.write','sessions.cancel','sessions.terminate','maintenance.run','classifications.confirm','memory.content',
+    'queries.verify']) r
 UNION ALL
 SELECT 'admin', right_key FROM dx_rights;
 

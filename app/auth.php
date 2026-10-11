@@ -177,7 +177,7 @@ const RIGHT_WORDS = [
     'changes.prepare' => 'prepare changes', 'migrations.draft' => 'draft migrations', 'exports.make' => 'export data',
     'data.unmask' => 'read unmasked rows', 'window.request' => 'ask for a window', 'data.write' => 'apply row changes',
     'sessions.cancel' => 'cancel a session', 'sessions.terminate' => 'terminate a session', 'maintenance.run' => 'run maintenance',
-    'classifications.confirm' => 'confirm classifications', 'memory.content' => "open the memory section's content",
+    'classifications.confirm' => 'confirm classifications', 'memory.content' => "open the memory section's content", 'queries.verify' => 'verify a saved query',
     'access.manage' => 'grant access levels', 'registry.manage' => 'classify databases', 'window.approve' => 'approve a window',
     'memory.reveal' => 'reveal memory content', 'settings.manage' => 'change the settings', 'audit.read' => 'read the audit',
     'freeze' => 'freeze the tool',
