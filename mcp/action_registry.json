@@ -1,0 +1,3029 @@
+{
+    "generated_from": "docs/developer-action-manifest.md",
+    "generated_at": "2026-10-11T18:53:08+00:00",
+    "screens": {
+        "home": {
+            "screen": "home",
+            "url": "/",
+            "section": "The shell (Phase 2 — sso-shell)",
+            "when": "the search box, my favourite and recent objects, my workbenches and their expiry, change sets awaiting me, drafts not yet observed applied, my open windows; a DBA's blocked sessions and findings; an admin's unclassified databases, pending grants, window requests, the door's state and the freeze switch",
+            "params": [],
+            "built": true,
+            "stub": false
+        },
+        "me": {
+            "screen": "me",
+            "url": "/me",
+            "section": "The shell (Phase 2 — sso-shell)",
+            "when": "who I am here: my roles and rights, my levels on each database, my open windows",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "my-trail": {
+            "screen": "my-trail",
+            "url": "/me/trail",
+            "section": "The shell (Phase 2 — sso-shell)",
+            "when": "my own trail here: what I ran, changed, drafted and opened, on which databases",
+            "params": [
+                "since",
+                "datname"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "databases-list": {
+            "screen": "databases-list",
+            "url": "/databases",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "when": "every database I may see, as cards by class: name, application, size, colour, private flag, grants state",
+            "params": [
+                "class",
+                "q",
+                "application"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "database-view": {
+            "screen": "database-view",
+            "url": "/db/{datname}",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "when": "one database's overview: version, size by schema, extensions against their defaults, non-default settings, my level, its verb tabs",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "schema-view": {
+            "screen": "schema-view",
+            "url": "/db/{datname}/s/{schema}",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "when": "one schema: its object families with counts",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "family-list": {
+            "screen": "family-list",
+            "url": "/db/{datname}/s/{schema}/{family}",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "when": "a paged, filtered table of one family's objects",
+            "params": [
+                "q",
+                "owner",
+                "page"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "object-view": {
+            "screen": "object-view",
+            "url": "/db/{datname}/o/{address}",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "when": "one object's page: its tabs — a table's columns, constraints, indexes, triggers, policies and partitions; the danger zone at the foot",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "search": {
+            "screen": "search",
+            "url": "/search",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "when": "where is the object called X — names, columns, types and comments across every database I may see",
+            "params": [
+                "q",
+                "class",
+                "family",
+                "datname"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "favourites": {
+            "screen": "favourites",
+            "url": "/favourites",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "when": "my favourite and recent objects",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "registry-list": {
+            "screen": "registry-list",
+            "url": "/admin/registry",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "when": "every database the cluster has, proposed and confirmed classes, the root step still owed while grants are pending",
+            "params": [
+                "class",
+                "state"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "registry-entry": {
+            "screen": "registry-entry",
+            "url": "/admin/registry/{datname}",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "when": "one database's registry entry: class, application, private flag, colour, label, hidden, notes, grants per table",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "access-list": {
+            "screen": "access-list",
+            "url": "/admin/access",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "when": "who holds which level on which database, people and roles",
+            "params": [
+                "datname",
+                "member"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "access-target": {
+            "screen": "access-target",
+            "url": "/admin/access/{datname}",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "when": "one database's levels: grant masked or rows to a person or a role, revoke",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "classifications": {
+            "screen": "classifications",
+            "url": "/db/{datname}/classifications",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "when": "the columns of a database classified secret or personal, proposed or confirmed, to confirm or clear",
+            "params": [
+                "state",
+                "class"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "object-ddl": {
+            "screen": "object-ddl",
+            "url": "/db/{datname}/o/{address}/ddl",
+            "section": "Structure, DDL and dependencies (slice 2)",
+            "when": "an object's DDL with its commented DROP, to copy or open in the editor",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "object-dependencies": {
+            "screen": "object-dependencies",
+            "url": "/db/{datname}/o/{address}/dependencies",
+            "section": "Structure, DDL and dependencies (slice 2)",
+            "when": "what this object depends on and what depends on it",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "object-impact": {
+            "screen": "object-impact",
+            "url": "/db/{datname}/o/{address}/impact",
+            "section": "Structure, DDL and dependencies (slice 2)",
+            "when": "what breaks if I drop or alter this object or column: the full reach of CASCADE, the views to drop and recreate in order",
+            "params": [
+                "column",
+                "verb"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "object-privileges": {
+            "screen": "object-privileges",
+            "url": "/db/{datname}/o/{address}/privileges",
+            "section": "Structure, DDL and dependencies (slice 2)",
+            "when": "who may do what on this object, its owner and the default privileges that apply",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "object-statistics": {
+            "screen": "object-statistics",
+            "url": "/db/{datname}/o/{address}/statistics",
+            "section": "Structure, DDL and dependencies (slice 2)",
+            "when": "a table's or an index's size, row estimate, scans, dead tuples, last vacuum and analyze, column statistics",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "join-path": {
+            "screen": "join-path",
+            "url": "/db/{datname}/join-path",
+            "section": "Structure, DDL and dependencies (slice 2)",
+            "when": "how two tables join: the shortest foreign-key path with its column pairs, emitted as a JOIN into the editor",
+            "params": [
+                "from",
+                "to",
+                "ignore"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "roles-list": {
+            "screen": "roles-list",
+            "url": "/roles",
+            "section": "Structure, DDL and dependencies (slice 2)",
+            "when": "the cluster's roles with their attributes (read-only)",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "role-view": {
+            "screen": "role-view",
+            "url": "/roles/{role}",
+            "section": "Structure, DDL and dependencies (slice 2)",
+            "when": "one role: attributes, memberships with their inherit and set options, effective privileges per database",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "sql": {
+            "screen": "sql",
+            "url": "/db/{datname}/sql",
+            "section": "The SQL workspace (slice 3 — the first exemplar)",
+            "when": "the editor on one database: Run, Explain, Format, Cancel; results with the cap and the masks said; messages with the error marker",
+            "params": [
+                "sql",
+                "saved",
+                "run"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "sql-history": {
+            "screen": "sql-history",
+            "url": "/sql/history",
+            "section": "The SQL workspace (slice 3 — the first exemplar)",
+            "when": "my runs (an auditor's: everyone's), searchable by database, class, outcome and text",
+            "params": [
+                "datname",
+                "status",
+                "q",
+                "member"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "query-run": {
+            "screen": "query-run",
+            "url": "/sql/runs/{id}",
+            "section": "The SQL workspace (slice 3 — the first exemplar)",
+            "when": "one run: its statements, each statement's status, rows, notices and time, the tier and level it ran at",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "saved-list": {
+            "screen": "saved-list",
+            "url": "/saved",
+            "section": "The SQL workspace (slice 3 — the first exemplar)",
+            "when": "saved queries, verified first, mine and shared",
+            "params": [
+                "q",
+                "datname",
+                "verified"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "saved-view": {
+            "screen": "saved-view",
+            "url": "/saved/{id}",
+            "section": "The SQL workspace (slice 3 — the first exemplar)",
+            "when": "one saved query, its parameters and its verification — never run implicitly",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "saved-add": {
+            "screen": "saved-add",
+            "url": "/saved/new",
+            "section": "The SQL workspace (slice 3 — the first exemplar)",
+            "when": "to save a query: title, the SQL, named parameters, the database, shared or private",
+            "params": [
+                "sql",
+                "datname"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "saved-edit": {
+            "screen": "saved-edit",
+            "url": "/saved/{id}/edit",
+            "section": "The SQL workspace (slice 3 — the first exemplar)",
+            "when": "to change a saved query (the verification drops by itself when the SQL changes)",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "workbenches-list": {
+            "screen": "workbenches-list",
+            "url": "/workbenches",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "when": "the workbenches: mine, and every workbench for an admin — cloned from what, size against quota, expiring when",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "workbench-add": {
+            "screen": "workbench-add",
+            "url": "/workbenches/new",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "when": "a new workbench: empty or a schema-only clone of a database I may see",
+            "params": [
+                "source",
+                "title"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "workbench-view": {
+            "screen": "workbench-view",
+            "url": "/workbenches/{id}",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "when": "one workbench: its change log, renew, export as a migration, import a CSV, reset its credential, drop",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "workbench-import": {
+            "screen": "workbench-import",
+            "url": "/workbenches/{id}/import",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "when": "to load a CSV into a workbench table: the preview, the column mapping, ON_ERROR for type errors",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "change-form": {
+            "screen": "change-form",
+            "url": "/forms/{datname}/{family}/{verb}",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "when": "a form to create, alter or drop a schema, table, column, constraint, index, view, materialized view, sequence, function, procedure, trigger, type, domain, enum, policy or comment — submit is Review",
+            "params": [
+                "object",
+                "safe"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "changes-list": {
+            "screen": "changes-list",
+            "url": "/changes",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "when": "the change log: change sets proposed, reviewed, rehearsed, applied, drafted, discarded or failed",
+            "params": [
+                "datname",
+                "state",
+                "origin",
+                "author"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "change-review": {
+            "screen": "change-review",
+            "url": "/changes/{id}",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "when": "Change review: the SQL, each statement's lock, rewrite and scan with its source, lint, the literals list, Rehearse, the one button the class allows",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "change-edit": {
+            "screen": "change-edit",
+            "url": "/changes/{id}/edit",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "when": "to edit a draft change set's title and statements before review",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "rehearsal-view": {
+            "screen": "rehearsal-view",
+            "url": "/rehearsals/{id}",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "when": "what a rehearsal measured: per statement the locks taken, whether it rewrote, its time, errors",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "drafts-list": {
+            "screen": "drafts-list",
+            "url": "/drafts",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "when": "migration drafts as cards per application, observed applied or not",
+            "params": [
+                "application",
+                "state"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "draft-view": {
+            "screen": "draft-view",
+            "url": "/drafts/{id}",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "when": "one draft: the file, Download, Copy, the observed-applied state",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "grid": {
+            "screen": "grid",
+            "url": "/db/{datname}/o/{address}/data",
+            "section": "Data: the grid, the row page, change sets of rows and windows (slice 5)",
+            "when": "a table's rows at my level: filters, sort, the generated SQL shown, the pending bar",
+            "params": [
+                "where",
+                "sort",
+                "page"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "row-view": {
+            "screen": "row-view",
+            "url": "/db/{datname}/o/{address}/rows/{key}",
+            "section": "Data: the grid, the row page, change sets of rows and windows (slice 5)",
+            "when": "one row as a full page: values with NULL, empty and DEFAULT distinct, the rows that reference it grouped by foreign key",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "row-add": {
+            "screen": "row-add",
+            "url": "/db/{datname}/o/{address}/rows/new",
+            "section": "Data: the grid, the row page, change sets of rows and windows (slice 5)",
+            "when": "to stage a new row: foreign keys through the record picker, generated columns read-only",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "row-edit": {
+            "screen": "row-edit",
+            "url": "/db/{datname}/o/{address}/rows/{key}/edit",
+            "section": "Data: the grid, the row page, change sets of rows and windows (slice 5)",
+            "when": "to stage a change to one row; a value I did not change is never written back",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "review-rows": {
+            "screen": "review-rows",
+            "url": "/changes/{id}/rows",
+            "section": "Data: the grid, the row page, change sets of rows and windows (slice 5)",
+            "when": "a change set's rows before Apply: new, changed and deleted, each against its before-image",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "conflict": {
+            "screen": "conflict",
+            "url": "/changes/{id}/conflict",
+            "section": "Data: the grid, the row page, change sets of rows and windows (slice 5)",
+            "when": "a row that changed since I staged it: mine, theirs, keep or drop",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "windows-list": {
+            "screen": "windows-list",
+            "url": "/windows",
+            "section": "Data: the grid, the row page, change sets of rows and windows (slice 5)",
+            "when": "my windows, and for a super-admin every request awaiting approval and every window open",
+            "params": [
+                "state",
+                "datname"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "window-add": {
+            "screen": "window-add",
+            "url": "/windows/new",
+            "section": "Data: the grid, the row page, change sets of rows and windows (slice 5)",
+            "when": "to ask for a read or a write window on one database: mode, minutes, reason — a fresh sign-on first if the last is older than 10 minutes",
+            "params": [
+                "datname",
+                "mode"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "window-view": {
+            "screen": "window-view",
+            "url": "/windows/{id}",
+            "section": "Data: the grid, the row page, change sets of rows and windows (slice 5)",
+            "when": "one window: who, where, why, who approved, its time left, what it applied",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "plans-list": {
+            "screen": "plans-list",
+            "url": "/plans",
+            "section": "Plans (slice 6)",
+            "when": "the plans I kept, with their queries and comments",
+            "params": [
+                "datname",
+                "q"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "plan-view": {
+            "screen": "plan-view",
+            "url": "/plans/{id}",
+            "section": "Plans (slice 6)",
+            "when": "one plan: the server-rendered tree with the flags first; PEV2 at 1280",
+            "params": [
+                "view"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "sessions": {
+            "screen": "sessions",
+            "url": "/sessions",
+            "section": "Activity and maintenance (slice 7)",
+            "when": "what is running now across the databases I may see: sessions running, waiting and blocking, the root blocker, texts normalized",
+            "params": [
+                "datname",
+                "state"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "db-activity": {
+            "screen": "db-activity",
+            "url": "/db/{datname}/activity",
+            "section": "Activity and maintenance (slice 7)",
+            "when": "the same, for one database",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "session-view": {
+            "screen": "session-view",
+            "url": "/sessions/{pid}",
+            "section": "Activity and maintenance (slice 7)",
+            "when": "one session: its normalized text, waits, the locks it holds and waits on, whom it blocks; cancel and terminate",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "locks": {
+            "screen": "locks",
+            "url": "/sessions/locks",
+            "section": "Activity and maintenance (slice 7)",
+            "when": "the locks held and awaited, linked to sessions and objects",
+            "params": [
+                "datname",
+                "object"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "statements": {
+            "screen": "statements",
+            "url": "/statements",
+            "section": "Activity and maintenance (slice 7)",
+            "when": "the top statements by total time, mean time, calls, rows and I/O, each linking to Explain",
+            "params": [
+                "datname",
+                "order"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "server": {
+            "screen": "server",
+            "url": "/server",
+            "section": "Activity and maintenance (slice 7)",
+            "when": "the server's I/O, checkpointer, WAL and archiver panels",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "vacuum": {
+            "screen": "vacuum",
+            "url": "/db/{datname}/vacuum",
+            "section": "Activity and maintenance (slice 7)",
+            "when": "the vacuum and wraparound panel: table ages, dead tuples, last vacuum and analyze, sessions holding the horizon",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "maintenance-list": {
+            "screen": "maintenance-list",
+            "url": "/maintenance",
+            "section": "Activity and maintenance (slice 7)",
+            "when": "maintenance jobs queued, running with their progress, and finished",
+            "params": [
+                "datname",
+                "state"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "maintenance-add": {
+            "screen": "maintenance-add",
+            "url": "/maintenance/new",
+            "section": "Activity and maintenance (slice 7)",
+            "when": "to queue VACUUM, ANALYZE, REINDEX CONCURRENTLY or REFRESH MATERIALIZED VIEW CONCURRENTLY — the lock it takes said first",
+            "params": [
+                "datname",
+                "object",
+                "operation"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "health-all": {
+            "screen": "health-all",
+            "url": "/health",
+            "section": "Health, history, compare and diagrams (slice 8)",
+            "when": "health findings across the databases I may see, by severity",
+            "params": [
+                "severity",
+                "check"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "db-health": {
+            "screen": "db-health",
+            "url": "/db/{datname}/health",
+            "section": "Health, history, compare and diagrams (slice 8)",
+            "when": "one database's findings, each with its fix as a change set",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "bloat": {
+            "screen": "bloat",
+            "url": "/db/{datname}/bloat",
+            "section": "Health, history, compare and diagrams (slice 8)",
+            "when": "bloat estimates for tables and indexes (exact where pgstattuple is installed)",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "index-advice": {
+            "screen": "index-advice",
+            "url": "/db/{datname}/indexes",
+            "section": "Health, history, compare and diagrams (slice 8)",
+            "when": "unused, duplicate, overlapping and invalid indexes; foreign keys without one",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "db-history": {
+            "screen": "db-history",
+            "url": "/db/{datname}/history",
+            "section": "Health, history, compare and diagrams (slice 8)",
+            "when": "what changed in this database since a date, each change attributed to a change set, a draft, the grants service, or unexplained",
+            "params": [
+                "since"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "object-history": {
+            "screen": "object-history",
+            "url": "/db/{datname}/o/{address}/history",
+            "section": "Health, history, compare and diagrams (slice 8)",
+            "when": "how an object's definition changed, snapshot by snapshot, with the diff",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "drift": {
+            "screen": "drift",
+            "url": "/drift",
+            "section": "Health, history, compare and diagrams (slice 8)",
+            "when": "unexplained changes across the databases — hand changes nobody made through the tool",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "compare": {
+            "screen": "compare",
+            "url": "/compare",
+            "section": "Health, history, compare and diagrams (slice 8)",
+            "when": "two databases, a database and a workbench, or one database at two snapshots: the inventory and per-object diffs",
+            "params": [
+                "a",
+                "b",
+                "at_a",
+                "at_b"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "compare-object": {
+            "screen": "compare-object",
+            "url": "/compare/object",
+            "section": "Health, history, compare and diagrams (slice 8)",
+            "when": "one object's normalized DDL on both sides, as a diff",
+            "params": [
+                "a",
+                "b",
+                "object"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "diagram": {
+            "screen": "diagram",
+            "url": "/db/{datname}/diagram",
+            "section": "Health, history, compare and diagrams (slice 8)",
+            "when": "a focused ER diagram: start from a table, add hops, choose the detail — the list of foreign keys at 375",
+            "params": [
+                "start",
+                "hops",
+                "detail",
+                "layout"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "backups": {
+            "screen": "backups",
+            "url": "/backups",
+            "section": "Health, history, compare and diagrams (slice 8)",
+            "when": "each database's last recorded backup and WAL archiving state",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "memory-estate": {
+            "screen": "memory-estate",
+            "url": "/memory",
+            "section": "The memory section (slice 9)",
+            "when": "every memory database: placement, size, the extension's version against the host's, each tenant's facade version, flags, the owner's printed steps",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "memory-tenant": {
+            "screen": "memory-tenant",
+            "url": "/memory/{datname}/{schema}",
+            "section": "The memory section (slice 9)",
+            "when": "one memory tenant's health: counts, the embedding backlog and its age, never-indexed documents, the extraction queue, failing facades, configured models",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "memory-episodes": {
+            "screen": "memory-episodes",
+            "url": "/memory/{datname}/{schema}/episodes",
+            "section": "The memory section (slice 9)",
+            "when": "episode counts by kind, application, day, sensitivity and scope — never a payload",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "memory-graph-stats": {
+            "screen": "memory-graph-stats",
+            "url": "/memory/{datname}/{schema}/graph-stats",
+            "section": "The memory section (slice 9)",
+            "when": "the graph's shape: stores, relations, node types, god-node counts, communities and import namespaces",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "memory-config": {
+            "screen": "memory-config",
+            "url": "/memory/{datname}/{schema}/config",
+            "section": "The memory section (slice 9)",
+            "when": "the tenant's models (provider, alias, the secret's name — never a value), skills and the facade reference",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "memory-isolation": {
+            "screen": "memory-isolation",
+            "url": "/memory/isolation",
+            "section": "The memory section (slice 9)",
+            "when": "the isolation audit: database CONNECT grants, maludb group members, BYPASSRLS logins, FORCE RLS state",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "memory-graph": {
+            "screen": "memory-graph",
+            "url": "/memory/{datname}/{schema}/graph",
+            "section": "The memory section (slice 9)",
+            "when": "the graph explorer: subject search, a subject's page, neighbours, a bounded walk, a path — every view logged",
+            "params": [
+                "q",
+                "subject",
+                "walk",
+                "to"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "memory-documents": {
+            "screen": "memory-documents",
+            "url": "/memory/{datname}/{schema}/documents",
+            "section": "The memory section (slice 9)",
+            "when": "document, chat and note metadata: source type, namespace, size, indexed when",
+            "params": [
+                "q",
+                "kind"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "proposals": {
+            "screen": "proposals",
+            "url": "/proposals",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "when": "what the agents proposed — change sets, drafts and notes — and what became of each",
+            "params": [
+                "agent",
+                "state"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "notes-list": {
+            "screen": "notes-list",
+            "url": "/notes",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "when": "the DBA notes the Advisor posted, newest first",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "note-view": {
+            "screen": "note-view",
+            "url": "/notes/{id}",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "when": "one DBA note with its proposals",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "exports-list": {
+            "screen": "exports-list",
+            "url": "/exports",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "when": "my exports: made, waiting, ready to download once, expired",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "notifications": {
+            "screen": "notifications",
+            "url": "/notifications",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "when": "my notifications",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "notification-prefs": {
+            "screen": "notification-prefs",
+            "url": "/me/notifications",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "when": "which notices reach me, in-app and by text (opt-in)",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "admin-settings": {
+            "screen": "admin-settings",
+            "url": "/admin/settings",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "when": "the tool's limits, caps, retention and expiry",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "audit": {
+            "screen": "audit",
+            "url": "/admin/audit",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "when": "every run through the door, by person, agent, database, class and outcome",
+            "params": [
+                "member",
+                "datname",
+                "status",
+                "since"
+            ],
+            "built": false,
+            "stub": false
+        },
+        "audit-run": {
+            "screen": "audit-run",
+            "url": "/admin/audit/{id}",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "when": "one run in full: the SQL (while kept), each statement, the tier, the level, the window",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "audit-reveals": {
+            "screen": "audit-reveals",
+            "url": "/admin/audit/reveals",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "when": "who unmasked, opened a window on or revealed what, when and why",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "admin-door": {
+            "screen": "admin-door",
+            "url": "/admin/door",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "when": "the door: its pool, waits, refusals today by rule, its version and libpg_query's",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "admin-grants": {
+            "screen": "admin-grants",
+            "url": "/admin/grants",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "when": "the grants service: its last pass per database, columns pending, tables not granted to the tool",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "admin-agents": {
+            "screen": "admin-agents",
+            "url": "/admin/agents",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "when": "the tool's agents: their roles, the targets they may read, their dispatches",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "admin-worker": {
+            "screen": "admin-worker",
+            "url": "/admin/worker",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "when": "the worker's passes and their outcomes",
+            "params": [],
+            "built": false,
+            "stub": false
+        },
+        "admin-freeze": {
+            "screen": "admin-freeze",
+            "url": "/admin/freeze",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "when": "the freeze switch and its history",
+            "params": [],
+            "built": false,
+            "stub": false
+        }
+    },
+    "actions": {
+        "registry_confirm": {
+            "action": "registry_confirm",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "endpoint": "/admin/registry/confirm.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "class",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "application or development or memory or unclassified"
+                },
+                {
+                    "name": "application_key",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "for application or development"
+                }
+            ],
+            "undo": "restore prior",
+            "confirm": true,
+            "approval": null,
+            "log_event": "registry.confirm",
+            "who": "registry.manage",
+            "agent": false,
+            "record_id": "the target",
+            "built": false
+        },
+        "registry_update": {
+            "action": "registry_update",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "endpoint": "/admin/registry/save.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "label",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "up to 60 characters"
+                },
+                {
+                    "name": "colour",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "a hex colour"
+                },
+                {
+                    "name": "private_by_design",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "yes or no"
+                },
+                {
+                    "name": "hidden",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "yes or no"
+                },
+                {
+                    "name": "notes",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": "restore prior",
+            "confirm": false,
+            "approval": null,
+            "log_event": "registry.update",
+            "who": "registry.manage",
+            "agent": false,
+            "record_id": "the target",
+            "built": false
+        },
+        "registry_discover": {
+            "action": "registry_discover",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "endpoint": "/admin/registry/discover.php",
+            "params": [],
+            "undo": null,
+            "confirm": false,
+            "approval": null,
+            "log_event": "registry.discover",
+            "who": "registry.manage",
+            "agent": false,
+            "record_id": "none",
+            "built": false
+        },
+        "access_grant": {
+            "action": "access_grant",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "endpoint": "/admin/access/grant.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "member",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "a person — never an agent"
+                },
+                {
+                    "name": "role",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "viewer or engineer or dba or admin"
+                },
+                {
+                    "name": "level",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "masked or rows"
+                }
+            ],
+            "undo": "access_revoke",
+            "confirm": true,
+            "approval": null,
+            "log_event": "access.grant",
+            "who": "access.manage",
+            "agent": false,
+            "record_id": "the access row",
+            "built": false
+        },
+        "access_revoke": {
+            "action": "access_revoke",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "endpoint": "/admin/access/revoke.php",
+            "params": [
+                {
+                    "name": "access",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "the access row"
+                }
+            ],
+            "undo": "access_grant",
+            "confirm": true,
+            "approval": null,
+            "log_event": "access.revoke",
+            "who": "access.manage",
+            "agent": false,
+            "record_id": "the access row",
+            "built": false
+        },
+        "classification_confirm": {
+            "action": "classification_confirm",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "endpoint": "/classify/confirm.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "object",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "a column address"
+                },
+                {
+                    "name": "class",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "secret or personal or none"
+                },
+                {
+                    "name": "kind",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "email or phone or name or address or birth_date or national_id or payment_card or bank_account or ip_address or free_text or compensation or health or other"
+                }
+            ],
+            "undo": "restore prior",
+            "confirm": true,
+            "approval": null,
+            "log_event": "classification.confirm",
+            "who": "classifications.confirm (a secret pattern cleared by a super-admin only)",
+            "agent": false,
+            "record_id": "the classification",
+            "built": false
+        },
+        "catalog_refresh": {
+            "action": "catalog_refresh",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "endpoint": "/catalog/refresh.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": null,
+            "confirm": false,
+            "approval": null,
+            "log_event": "catalog.refresh",
+            "who": "catalog.read",
+            "agent": false,
+            "record_id": "the target",
+            "built": false
+        },
+        "favourite_add": {
+            "action": "favourite_add",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "endpoint": "/favourites/add.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "object",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": "favourite_remove",
+            "confirm": false,
+            "approval": null,
+            "log_event": "favourite.add",
+            "who": "catalog.read",
+            "agent": false,
+            "record_id": "the favourite",
+            "built": false
+        },
+        "favourite_remove": {
+            "action": "favourite_remove",
+            "section": "The estate, access and the object browser (slice 1 — the CRUD exemplar)",
+            "endpoint": "/favourites/remove.php",
+            "params": [
+                {
+                    "name": "favourite",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": "favourite_add",
+            "confirm": false,
+            "approval": null,
+            "log_event": "favourite.remove",
+            "who": "own",
+            "agent": false,
+            "record_id": "the favourite",
+            "built": false
+        },
+        "sql_run": {
+            "action": "sql_run",
+            "section": "The SQL workspace (slice 3 — the first exemplar)",
+            "endpoint": "/sql/run.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "sql",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "one statement or a script"
+                },
+                {
+                    "name": "scope",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "cursor or selection or script"
+                }
+            ],
+            "undo": null,
+            "confirm": false,
+            "approval": null,
+            "log_event": "sql.run",
+            "who": "data.read (a read at my level) or workbench.apply (a workbench)",
+            "agent": false,
+            "record_id": "the run",
+            "built": false
+        },
+        "sql_cancel": {
+            "action": "sql_cancel",
+            "section": "The SQL workspace (slice 3 — the first exemplar)",
+            "endpoint": "/sql/cancel.php",
+            "params": [
+                {
+                    "name": "run",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": null,
+            "confirm": false,
+            "approval": null,
+            "log_event": "sql.cancel",
+            "who": "own",
+            "agent": false,
+            "record_id": "the run",
+            "built": false
+        },
+        "saved_query_save": {
+            "action": "saved_query_save",
+            "section": "The SQL workspace (slice 3 — the first exemplar)",
+            "endpoint": "/saved/save.php",
+            "params": [
+                {
+                    "name": "title",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "up to 120 characters"
+                },
+                {
+                    "name": "sql",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "target",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "description",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "shared",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "yes or no — an agent's are always private"
+                }
+            ],
+            "undo": "saved_query_delete",
+            "confirm": false,
+            "approval": null,
+            "log_event": "saved_query.save",
+            "who": "queries.save",
+            "agent": true,
+            "record_id": "the saved query",
+            "built": false
+        },
+        "saved_query_update": {
+            "action": "saved_query_update",
+            "section": "The SQL workspace (slice 3 — the first exemplar)",
+            "endpoint": "/saved/update.php",
+            "params": [
+                {
+                    "name": "saved_query",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "required": false,
+                    "name": "title",
+                    "repeated": false,
+                    "hint": "up to 120 characters"
+                },
+                {
+                    "required": false,
+                    "name": "sql",
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "required": false,
+                    "name": "target",
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "required": false,
+                    "name": "description",
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "required": false,
+                    "name": "shared",
+                    "repeated": false,
+                    "hint": "yes or no — an agent's are always private"
+                }
+            ],
+            "undo": "restore prior",
+            "confirm": false,
+            "approval": null,
+            "log_event": "saved_query.update",
+            "who": "own",
+            "agent": false,
+            "record_id": "the saved query",
+            "built": false,
+            "partial": true
+        },
+        "saved_query_delete": {
+            "action": "saved_query_delete",
+            "section": "The SQL workspace (slice 3 — the first exemplar)",
+            "endpoint": "/saved/delete.php",
+            "params": [
+                {
+                    "name": "saved_query",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": null,
+            "confirm": true,
+            "approval": null,
+            "log_event": "saved_query.delete",
+            "who": "own",
+            "agent": false,
+            "record_id": "the saved query",
+            "built": false
+        },
+        "saved_query_verify": {
+            "action": "saved_query_verify",
+            "section": "The SQL workspace (slice 3 — the first exemplar)",
+            "endpoint": "/saved/verify.php",
+            "params": [
+                {
+                    "name": "saved_query",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "verified",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "yes or no"
+                },
+                {
+                    "name": "reason",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "when no"
+                }
+            ],
+            "undo": "restore prior",
+            "confirm": false,
+            "approval": null,
+            "log_event": "saved_query.verify",
+            "who": "queries.verify",
+            "agent": false,
+            "record_id": "the saved query",
+            "built": false
+        },
+        "export_make": {
+            "action": "export_make",
+            "section": "The SQL workspace (slice 3 — the first exemplar)",
+            "endpoint": "/exports/make.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "kind",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "result or table"
+                },
+                {
+                    "name": "format",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "csv or json or sql"
+                },
+                {
+                    "name": "sql",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "for a result"
+                },
+                {
+                    "name": "object",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "for a table"
+                }
+            ],
+            "undo": "export_delete",
+            "confirm": false,
+            "approval": null,
+            "log_event": "export.make",
+            "who": "exports.make",
+            "agent": false,
+            "record_id": "the export",
+            "built": false
+        },
+        "workbench_create": {
+            "action": "workbench_create",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "endpoint": "/workbenches/save.php",
+            "params": [
+                {
+                    "name": "title",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "up to 80 characters"
+                },
+                {
+                    "name": "kind",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "empty or clone"
+                },
+                {
+                    "name": "source",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "a database to clone the schema of"
+                }
+            ],
+            "undo": "workbench_drop",
+            "confirm": false,
+            "approval": null,
+            "log_event": "workbench.create",
+            "who": "workbench.use",
+            "agent": false,
+            "record_id": "the workbench",
+            "built": false
+        },
+        "workbench_renew": {
+            "action": "workbench_renew",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "endpoint": "/workbenches/renew.php",
+            "params": [
+                {
+                    "name": "workbench",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "days",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "up to the setting's expiry"
+                }
+            ],
+            "undo": null,
+            "confirm": false,
+            "approval": null,
+            "log_event": "workbench.renew",
+            "who": "owner",
+            "agent": false,
+            "record_id": "the workbench",
+            "built": false
+        },
+        "workbench_drop": {
+            "action": "workbench_drop",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "endpoint": "/workbenches/drop.php",
+            "params": [
+                {
+                    "name": "workbench",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "confirm_name",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "the workbench's name typed back"
+                }
+            ],
+            "undo": null,
+            "confirm": true,
+            "approval": null,
+            "log_event": "workbench.drop",
+            "who": "owner or registry.manage",
+            "agent": false,
+            "record_id": "the workbench",
+            "built": false
+        },
+        "workbench_reset_credential": {
+            "action": "workbench_reset_credential",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "endpoint": "/workbenches/reset.php",
+            "params": [
+                {
+                    "name": "workbench",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": null,
+            "confirm": true,
+            "approval": null,
+            "log_event": "workbench.reset_credential",
+            "who": "registry.manage",
+            "agent": false,
+            "record_id": "the workbench",
+            "built": false
+        },
+        "workbench_import": {
+            "action": "workbench_import",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "endpoint": "/workbenches/import.php",
+            "params": [
+                {
+                    "name": "workbench",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "object",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "a table address"
+                },
+                {
+                    "name": "file",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "a CSV upload"
+                },
+                {
+                    "name": "mapping",
+                    "required": false,
+                    "repeated": true,
+                    "hint": "column to field"
+                },
+                {
+                    "name": "on_error",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "stop or ignore"
+                }
+            ],
+            "undo": null,
+            "confirm": false,
+            "approval": null,
+            "log_event": "workbench.import",
+            "who": "owner and workbench.apply",
+            "agent": false,
+            "record_id": "the workbench",
+            "built": false
+        },
+        "workbench_export": {
+            "action": "workbench_export",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "endpoint": "/workbenches/export.php",
+            "params": [
+                {
+                    "name": "workbench",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "from_change_set",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "to_change_set",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": "migration_draft_withdraw",
+            "confirm": false,
+            "approval": null,
+            "log_event": "workbench.export",
+            "who": "owner and migrations.draft",
+            "agent": false,
+            "record_id": "the draft",
+            "built": false
+        },
+        "change_set_prepare": {
+            "action": "change_set_prepare",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "endpoint": "/changes/prepare.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "family",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "verb",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "create or alter or drop or truncate"
+                },
+                {
+                    "name": "object",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "fields",
+                    "required": false,
+                    "repeated": true,
+                    "hint": "the form's fields"
+                },
+                {
+                    "name": "safe",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "yes or no"
+                }
+            ],
+            "undo": "change_set_discard",
+            "confirm": false,
+            "approval": null,
+            "log_event": "change_set.prepare",
+            "who": "changes.prepare",
+            "agent": false,
+            "record_id": "the change set",
+            "built": false
+        },
+        "change_set_propose": {
+            "action": "change_set_propose",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "endpoint": "/changes/propose.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "title",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "up to 120 characters"
+                },
+                {
+                    "name": "sql",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "the statements"
+                },
+                {
+                    "name": "reason",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "origin",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "editor or health_fix or agent_proposal"
+                }
+            ],
+            "undo": "change_set_discard",
+            "confirm": false,
+            "approval": null,
+            "log_event": "change_set.propose",
+            "who": "changes.prepare",
+            "agent": true,
+            "record_id": "the change set",
+            "built": false
+        },
+        "change_set_update": {
+            "action": "change_set_update",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "endpoint": "/changes/update.php",
+            "params": [
+                {
+                    "name": "change_set",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "title",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "sql",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "the statements — a draft only"
+                }
+            ],
+            "undo": "restore prior",
+            "confirm": false,
+            "approval": null,
+            "log_event": "change_set.update",
+            "who": "own",
+            "agent": false,
+            "record_id": "the change set",
+            "built": false
+        },
+        "change_set_review": {
+            "action": "change_set_review",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "endpoint": "/changes/review.php",
+            "params": [
+                {
+                    "name": "change_set",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": null,
+            "confirm": false,
+            "approval": null,
+            "log_event": "change_set.review",
+            "who": "changes.prepare",
+            "agent": false,
+            "record_id": "the change set",
+            "built": false
+        },
+        "change_set_override": {
+            "action": "change_set_override",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "endpoint": "/changes/override.php",
+            "params": [
+                {
+                    "name": "item",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "rule",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "the lint rule"
+                },
+                {
+                    "name": "reason",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "up to 500 characters"
+                }
+            ],
+            "undo": null,
+            "confirm": false,
+            "approval": null,
+            "log_event": "change_set.override",
+            "who": "changes.prepare",
+            "agent": false,
+            "record_id": "the change set",
+            "built": false
+        },
+        "rehearsal_run": {
+            "action": "rehearsal_run",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "endpoint": "/changes/rehearse.php",
+            "params": [
+                {
+                    "name": "change_set",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": null,
+            "confirm": false,
+            "approval": null,
+            "log_event": "rehearsal.run",
+            "who": "changes.prepare",
+            "agent": true,
+            "record_id": "the rehearsal",
+            "built": false
+        },
+        "change_set_apply": {
+            "action": "change_set_apply",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "endpoint": "/changes/apply.php",
+            "params": [
+                {
+                    "name": "change_set",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "typed_count",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "above the confirm cap"
+                },
+                {
+                    "name": "confirm_name",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "for a DROP or TRUNCATE on a workbench"
+                }
+            ],
+            "undo": "change_set_undo",
+            "confirm": true,
+            "approval": null,
+            "log_event": "change_set.apply",
+            "who": "workbench.apply (a workbench, its owner) or data.write (rows in my write window)",
+            "agent": false,
+            "record_id": "the change set",
+            "built": false
+        },
+        "change_set_discard": {
+            "action": "change_set_discard",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "endpoint": "/changes/discard.php",
+            "params": [
+                {
+                    "name": "change_set",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": null,
+            "confirm": true,
+            "approval": null,
+            "log_event": "change_set.discard",
+            "who": "own or changes.prepare",
+            "agent": false,
+            "record_id": "the change set",
+            "built": false
+        },
+        "migration_draft_create": {
+            "action": "migration_draft_create",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "endpoint": "/drafts/save.php",
+            "params": [
+                {
+                    "name": "change_set",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "rehearsed"
+                },
+                {
+                    "name": "file_number",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "the application's next number if known"
+                },
+                {
+                    "name": "slug",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "lowercase words joined by underscores"
+                }
+            ],
+            "undo": "migration_draft_withdraw",
+            "confirm": false,
+            "approval": null,
+            "log_event": "migration_draft.create",
+            "who": "migrations.draft",
+            "agent": true,
+            "record_id": "the draft",
+            "built": false
+        },
+        "migration_draft_update": {
+            "action": "migration_draft_update",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "endpoint": "/drafts/update.php",
+            "params": [
+                {
+                    "name": "draft",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "file_number",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "slug",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "notes",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": "restore prior",
+            "confirm": false,
+            "approval": null,
+            "log_event": "migration_draft.update",
+            "who": "migrations.draft",
+            "agent": false,
+            "record_id": "the draft",
+            "built": false
+        },
+        "migration_draft_withdraw": {
+            "action": "migration_draft_withdraw",
+            "section": "Workbenches, forms, change review and migration drafts (slice 4 — the second exemplar)",
+            "endpoint": "/drafts/withdraw.php",
+            "params": [
+                {
+                    "name": "draft",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "reason",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": null,
+            "confirm": true,
+            "approval": null,
+            "log_event": "migration_draft.withdraw",
+            "who": "own or migrations.draft",
+            "agent": false,
+            "record_id": "the draft",
+            "built": false
+        },
+        "row_stage": {
+            "action": "row_stage",
+            "section": "Data: the grid, the row page, change sets of rows and windows (slice 5)",
+            "endpoint": "/data/stage.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "object",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "a table address"
+                },
+                {
+                    "name": "op",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "insert or update or delete"
+                },
+                {
+                    "name": "key",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "the row's identity — not for insert"
+                },
+                {
+                    "name": "values",
+                    "required": false,
+                    "repeated": true,
+                    "hint": "column to value — only the columns changed"
+                }
+            ],
+            "undo": "row_unstage",
+            "confirm": false,
+            "approval": null,
+            "log_event": "row.stage",
+            "who": "data.write",
+            "agent": false,
+            "record_id": "the change set",
+            "built": false
+        },
+        "row_unstage": {
+            "action": "row_unstage",
+            "section": "Data: the grid, the row page, change sets of rows and windows (slice 5)",
+            "endpoint": "/data/unstage.php",
+            "params": [
+                {
+                    "name": "item",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": "row_stage",
+            "confirm": false,
+            "approval": null,
+            "log_event": "row.unstage",
+            "who": "own",
+            "agent": false,
+            "record_id": "the change set",
+            "built": false
+        },
+        "row_resolve_conflict": {
+            "action": "row_resolve_conflict",
+            "section": "Data: the grid, the row page, change sets of rows and windows (slice 5)",
+            "endpoint": "/data/resolve.php",
+            "params": [
+                {
+                    "name": "item",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "keep",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "mine or theirs"
+                }
+            ],
+            "undo": null,
+            "confirm": false,
+            "approval": null,
+            "log_event": "row.resolve_conflict",
+            "who": "own",
+            "agent": false,
+            "record_id": "the change set",
+            "built": false
+        },
+        "change_set_undo": {
+            "action": "change_set_undo",
+            "section": "Data: the grid, the row page, change sets of rows and windows (slice 5)",
+            "endpoint": "/changes/undo.php",
+            "params": [
+                {
+                    "name": "change_set",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": null,
+            "confirm": true,
+            "approval": null,
+            "log_event": "change_set.undo",
+            "who": "data.write (inside my write window)",
+            "agent": false,
+            "record_id": "the change set",
+            "built": false
+        },
+        "window_request": {
+            "action": "window_request",
+            "section": "Data: the grid, the row page, change sets of rows and windows (slice 5)",
+            "endpoint": "/windows/request.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "mode",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "read or write"
+                },
+                {
+                    "name": "minutes",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "up to the setting's maximum"
+                },
+                {
+                    "name": "reason",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "up to 500 characters"
+                }
+            ],
+            "undo": "window_withdraw",
+            "confirm": false,
+            "approval": null,
+            "log_event": "window.request",
+            "who": "window.request",
+            "agent": false,
+            "record_id": "the window",
+            "built": false
+        },
+        "window_withdraw": {
+            "action": "window_withdraw",
+            "section": "Data: the grid, the row page, change sets of rows and windows (slice 5)",
+            "endpoint": "/windows/withdraw.php",
+            "params": [
+                {
+                    "name": "window",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": null,
+            "confirm": false,
+            "approval": null,
+            "log_event": "window.withdraw",
+            "who": "own",
+            "agent": false,
+            "record_id": "the window",
+            "built": false
+        },
+        "window_decide": {
+            "action": "window_decide",
+            "section": "Data: the grid, the row page, change sets of rows and windows (slice 5)",
+            "endpoint": "/windows/decide.php",
+            "params": [
+                {
+                    "name": "window",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "approve",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "yes or no"
+                },
+                {
+                    "name": "note",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": null,
+            "confirm": true,
+            "approval": null,
+            "log_event": "window.decide",
+            "who": "window.approve",
+            "agent": false,
+            "record_id": "the window",
+            "built": false
+        },
+        "window_end": {
+            "action": "window_end",
+            "section": "Data: the grid, the row page, change sets of rows and windows (slice 5)",
+            "endpoint": "/windows/end.php",
+            "params": [
+                {
+                    "name": "window",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": null,
+            "confirm": false,
+            "approval": null,
+            "log_event": "window.end",
+            "who": "own or window.approve",
+            "agent": false,
+            "record_id": "the window",
+            "built": false
+        },
+        "plan_explain": {
+            "action": "plan_explain",
+            "section": "Plans (slice 6)",
+            "endpoint": "/plans/explain.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "sql",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "one statement"
+                },
+                {
+                    "name": "analyze",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "yes or no — runs it"
+                },
+                {
+                    "name": "buffers",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "yes or no"
+                },
+                {
+                    "name": "generic",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "yes or no — GENERIC_PLAN"
+                },
+                {
+                    "name": "comment",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": "plan_delete",
+            "confirm": false,
+            "approval": null,
+            "log_event": "plan.explain",
+            "who": "plans.explain (analyze needs data.read)",
+            "agent": false,
+            "record_id": "the plan",
+            "built": false
+        },
+        "plan_comment": {
+            "action": "plan_comment",
+            "section": "Plans (slice 6)",
+            "endpoint": "/plans/comment.php",
+            "params": [
+                {
+                    "name": "plan",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "comment",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "up to 500 characters"
+                }
+            ],
+            "undo": "restore prior",
+            "confirm": false,
+            "approval": null,
+            "log_event": "plan.comment",
+            "who": "own",
+            "agent": false,
+            "record_id": "the plan",
+            "built": false
+        },
+        "plan_delete": {
+            "action": "plan_delete",
+            "section": "Plans (slice 6)",
+            "endpoint": "/plans/delete.php",
+            "params": [
+                {
+                    "name": "plan",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": null,
+            "confirm": true,
+            "approval": null,
+            "log_event": "plan.delete",
+            "who": "own",
+            "agent": false,
+            "record_id": "the plan",
+            "built": false
+        },
+        "session_cancel": {
+            "action": "session_cancel",
+            "section": "Activity and maintenance (slice 7)",
+            "endpoint": "/sessions/cancel.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "pid",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "the backend"
+                }
+            ],
+            "undo": null,
+            "confirm": true,
+            "approval": null,
+            "log_event": "session.cancel",
+            "who": "sessions.cancel",
+            "agent": false,
+            "record_id": "none",
+            "built": false
+        },
+        "session_terminate": {
+            "action": "session_terminate",
+            "section": "Activity and maintenance (slice 7)",
+            "endpoint": "/sessions/terminate.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "pid",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "the backend"
+                },
+                {
+                    "name": "reason",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "up to 200 characters"
+                }
+            ],
+            "undo": null,
+            "confirm": true,
+            "approval": null,
+            "log_event": "session.terminate",
+            "who": "sessions.terminate",
+            "agent": false,
+            "record_id": "none",
+            "built": false
+        },
+        "session_text_open": {
+            "action": "session_text_open",
+            "section": "Activity and maintenance (slice 7)",
+            "endpoint": "/sessions/text.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "pid",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "the backend"
+                },
+                {
+                    "name": "reason",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "up to 200 characters"
+                }
+            ],
+            "undo": null,
+            "confirm": false,
+            "approval": null,
+            "log_event": "session.text_open",
+            "who": "sessions.cancel",
+            "agent": false,
+            "record_id": "none",
+            "built": false
+        },
+        "maintenance_queue": {
+            "action": "maintenance_queue",
+            "section": "Activity and maintenance (slice 7)",
+            "endpoint": "/maintenance/queue.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "object",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "a table or index or materialized view address"
+                },
+                {
+                    "name": "operation",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "vacuum or analyze or vacuum_analyze or reindex_concurrently or refresh_concurrently"
+                }
+            ],
+            "undo": "maintenance_cancel",
+            "confirm": true,
+            "approval": null,
+            "log_event": "maintenance.queue",
+            "who": "maintenance.run",
+            "agent": false,
+            "record_id": "the job",
+            "built": false
+        },
+        "maintenance_cancel": {
+            "action": "maintenance_cancel",
+            "section": "Activity and maintenance (slice 7)",
+            "endpoint": "/maintenance/cancel.php",
+            "params": [
+                {
+                    "name": "job",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": null,
+            "confirm": true,
+            "approval": null,
+            "log_event": "maintenance.cancel",
+            "who": "own or maintenance.run",
+            "agent": false,
+            "record_id": "the job",
+            "built": false
+        },
+        "health_fix_prepare": {
+            "action": "health_fix_prepare",
+            "section": "Health, history, compare and diagrams (slice 8)",
+            "endpoint": "/health/fix.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "finding",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "a finding's key"
+                }
+            ],
+            "undo": "change_set_discard",
+            "confirm": false,
+            "approval": null,
+            "log_event": "health.fix_prepare",
+            "who": "changes.prepare",
+            "agent": false,
+            "record_id": "the change set",
+            "built": false
+        },
+        "drift_explain": {
+            "action": "drift_explain",
+            "section": "Health, history, compare and diagrams (slice 8)",
+            "endpoint": "/history/explain.php",
+            "params": [
+                {
+                    "name": "snapshot_object",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "a change in a snapshot"
+                },
+                {
+                    "name": "note",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "up to 500 characters"
+                }
+            ],
+            "undo": "restore prior",
+            "confirm": false,
+            "approval": null,
+            "log_event": "drift.explain",
+            "who": "maintenance.run",
+            "agent": false,
+            "record_id": "the snapshot object",
+            "built": false
+        },
+        "snapshot_take": {
+            "action": "snapshot_take",
+            "section": "Health, history, compare and diagrams (slice 8)",
+            "endpoint": "/history/snapshot.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": null,
+            "confirm": false,
+            "approval": null,
+            "log_event": "snapshot.take",
+            "who": "maintenance.run",
+            "agent": false,
+            "record_id": "the snapshot",
+            "built": false
+        },
+        "diagram_layout_save": {
+            "action": "diagram_layout_save",
+            "section": "Health, history, compare and diagrams (slice 8)",
+            "endpoint": "/diagrams/save.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "title",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "up to 80 characters"
+                },
+                {
+                    "name": "start",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "a table address"
+                },
+                {
+                    "name": "hops",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "1 to 4"
+                },
+                {
+                    "name": "detail",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "names or keys or all"
+                },
+                {
+                    "name": "positions",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "the layout's JSON"
+                }
+            ],
+            "undo": "diagram_layout_delete",
+            "confirm": false,
+            "approval": null,
+            "log_event": "diagram_layout.save",
+            "who": "catalog.read",
+            "agent": false,
+            "record_id": "the layout",
+            "built": false
+        },
+        "diagram_layout_delete": {
+            "action": "diagram_layout_delete",
+            "section": "Health, history, compare and diagrams (slice 8)",
+            "endpoint": "/diagrams/delete.php",
+            "params": [
+                {
+                    "name": "layout",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": null,
+            "confirm": true,
+            "approval": null,
+            "log_event": "diagram_layout.delete",
+            "who": "own",
+            "agent": false,
+            "record_id": "the layout",
+            "built": false
+        },
+        "memory_reveal": {
+            "action": "memory_reveal",
+            "section": "The memory section (slice 9)",
+            "endpoint": "/memory/reveal.php",
+            "params": [
+                {
+                    "name": "target",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "schema",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "the tenant schema"
+                },
+                {
+                    "name": "kind",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "episode or document"
+                },
+                {
+                    "name": "id",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "the episode or document id"
+                },
+                {
+                    "name": "reason",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "up to 500 characters"
+                }
+            ],
+            "undo": null,
+            "confirm": true,
+            "approval": null,
+            "log_event": "memory.reveal",
+            "who": "memory.reveal",
+            "agent": false,
+            "record_id": "none",
+            "built": false
+        },
+        "dba_note_post": {
+            "action": "dba_note_post",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "endpoint": "/notes/post.php",
+            "params": [
+                {
+                    "name": "title",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "up to 120 characters"
+                },
+                {
+                    "name": "body",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "markdown — up to 20000 characters"
+                },
+                {
+                    "name": "change_sets",
+                    "required": false,
+                    "repeated": true,
+                    "hint": "the proposals it carries"
+                }
+            ],
+            "undo": null,
+            "confirm": false,
+            "approval": null,
+            "log_event": "dba_note.post",
+            "who": "health.read",
+            "agent": true,
+            "record_id": "the note",
+            "built": false
+        },
+        "export_delete": {
+            "action": "export_delete",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "endpoint": "/exports/delete.php",
+            "params": [
+                {
+                    "name": "export",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": null,
+            "confirm": false,
+            "approval": null,
+            "log_event": "export.delete",
+            "who": "own",
+            "agent": false,
+            "record_id": "the export",
+            "built": false
+        },
+        "notification_read": {
+            "action": "notification_read",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "endpoint": "/notifications/read.php",
+            "params": [
+                {
+                    "name": "notification",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": null,
+            "confirm": false,
+            "approval": null,
+            "log_event": "notification.read",
+            "who": "own",
+            "agent": false,
+            "record_id": "the notification",
+            "built": false
+        },
+        "notification_read_all": {
+            "action": "notification_read_all",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "endpoint": "/notifications/read-all.php",
+            "params": [],
+            "undo": null,
+            "confirm": false,
+            "approval": null,
+            "log_event": "notification.read_all",
+            "who": "own",
+            "agent": false,
+            "record_id": "none",
+            "built": false
+        },
+        "notification_prefs_save": {
+            "action": "notification_prefs_save",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "endpoint": "/notifications/prefs.php",
+            "params": [
+                {
+                    "name": "kinds",
+                    "required": false,
+                    "repeated": true,
+                    "hint": "the notices I want"
+                },
+                {
+                    "name": "texts",
+                    "required": false,
+                    "repeated": false,
+                    "hint": "yes or no — K6 texts for urgent notices"
+                }
+            ],
+            "undo": "restore prior",
+            "confirm": false,
+            "approval": null,
+            "log_event": "notification.prefs_save",
+            "who": "own",
+            "agent": false,
+            "record_id": "none",
+            "built": false
+        },
+        "dispatch_retry": {
+            "action": "dispatch_retry",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "endpoint": "/admin/dispatches/retry.php",
+            "params": [
+                {
+                    "name": "dispatch",
+                    "required": true,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": null,
+            "confirm": false,
+            "approval": null,
+            "log_event": "dispatch.retry",
+            "who": "settings.manage",
+            "agent": false,
+            "record_id": "the dispatch",
+            "built": false
+        },
+        "settings_save": {
+            "action": "settings_save",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "endpoint": "/admin/settings/save.php",
+            "params": [
+                {
+                    "name": "screen_timeout_seconds",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "workbench_timeout_seconds",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "show_rows",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "show_bytes_mb",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "cell_chars",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "runs_per_person",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "grid_page_rows",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "window_default_minutes",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "window_max_minutes",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "change_set_confirm_rows",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "change_set_max_rows",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "backup_max_age_hours",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "undo_days",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "workbench_quota_gb",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "workbench_expiry_days",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "workbenches_per_person",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "sql_text_days",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "audit_keep_days",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "export_max_rows",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "export_max_mb",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                },
+                {
+                    "name": "export_keep_hours",
+                    "required": false,
+                    "repeated": false,
+                    "hint": ""
+                }
+            ],
+            "undo": "restore prior",
+            "confirm": true,
+            "approval": null,
+            "log_event": "settings.save",
+            "who": "settings.manage",
+            "agent": false,
+            "record_id": "none",
+            "built": false
+        },
+        "freeze_on": {
+            "action": "freeze_on",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "endpoint": "/admin/freeze/on.php",
+            "params": [
+                {
+                    "name": "reason",
+                    "required": true,
+                    "repeated": false,
+                    "hint": "up to 500 characters"
+                }
+            ],
+            "undo": "freeze_off",
+            "confirm": true,
+            "approval": null,
+            "log_event": "freeze.on",
+            "who": "freeze",
+            "agent": false,
+            "record_id": "none",
+            "built": false
+        },
+        "freeze_off": {
+            "action": "freeze_off",
+            "section": "Agents, exports, notifications, home and admin (slice 10)",
+            "endpoint": "/admin/freeze/off.php",
+            "params": [],
+            "undo": "freeze_on",
+            "confirm": true,
+            "approval": null,
+            "log_event": "freeze.off",
+            "who": "freeze",
+            "agent": false,
+            "record_id": "none",
+            "built": false
+        }
+    }
+}

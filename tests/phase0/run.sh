@@ -47,6 +47,13 @@ elif [ -f "$ROOT/db/proof/phase0_proof.sql" ]; then
   summary=$(echo "$out" | grep -E '[0-9]+ ok, [0-9]+ failed' | head -1 | sed 's/^ *//')
   failed=$(echo "$summary" | sed -E 's/.* ([0-9]+) failed.*/\1/')
   check "$failed" "0" "schema proof: $summary"
+  if [ -f "$ROOT/db/proof/phase1_proof.sql" ]; then
+    out=$(sudo -n -u postgres psql -v ON_ERROR_STOP=1 -d "$DX_DEV_DB" -f "$ROOT/db/proof/phase1_proof.sql" 2>&1)
+    echo "$out" | grep -E '^ ?FAIL' || true
+    summary=$(echo "$out" | grep -E '[0-9]+ ok, [0-9]+ failed' | head -1 | sed 's/^ *//')
+    failed=$(echo "$summary" | sed -E 's/.* ([0-9]+) failed.*/\1/')
+    check "$failed" "0" "Phase 1 reads proof: $summary"
+  fi
 else
   echo "skip db/proof/phase0_proof.sql is not written yet (the schema builder's) — the kit's checks below run on whatever db/*.sql applies"
 fi

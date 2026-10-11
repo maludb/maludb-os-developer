@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# The schema proof (docs/developer-design.md §10, Phase 0): a fresh scratch database `dx_proof`, every db/[0-9]*.sql applied in order as
+# The schema proof (docs/developer-design.md §10, Phase 0; the Phase 1 reads proof, db/012, after it): a fresh scratch database `dx_proof`, every db/[0-9]*.sql applied in order as
 # postgres, then db/proof/phase0_proof.sql (one transaction, rolled back). Re-runnable from nothing; never touches an installed database.
 # The three installer roles are made here when missing (cluster-wide, NOLOGIN — the installer gives them passwords).
 # `sudo -n -u postgres` is used for scratch dx_* databases and these roles only.
@@ -24,3 +24,4 @@ for f in db/[0-9]*.sql; do
 done
 echo " $n migrations applied to $DB"
 $PSQL -d "$DB" -f db/proof/phase0_proof.sql
+$PSQL -d "$DB" -f db/proof/phase1_proof.sql

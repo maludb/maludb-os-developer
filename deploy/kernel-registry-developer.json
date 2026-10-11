@@ -1,0 +1,43 @@
+{
+  "schema": "maludb-os.registry/1",
+  "app_key": "developer",
+  "name": "Developer",
+  "note": "The installer (bin/app_install.php, step 'registry') writes mcp/registries/developer.json in the kernel from this file's `resolve` block plus mcp/action_registry.json. Each resolve tool answers a plain LIST of rows carrying id_field and label_field when given `q` alone (docs/developer-mcp-tool-surface.md, 'The resolvers'). A target resolves by its database name; a workbench, a change set, a saved query and a draft by their titles. An object is an address and a run, plan, window, job or item an id — never resolved by name. Only five actions admit an agent (design §5); every other action is people-only, so the resolvers matter for those five and for the command bar's navigation.",
+  "resolve": {
+    "target": {
+      "tool": "find_databases",
+      "query_param": "q",
+      "id_field": "datname",
+      "label_field": "label",
+      "params": ["target", "source"]
+    },
+    "workbench": {
+      "tool": "find_workbenches",
+      "query_param": "q",
+      "id_field": "workbench_id",
+      "label_field": "title",
+      "params": ["workbench"]
+    },
+    "change_set": {
+      "tool": "find_change_sets",
+      "query_param": "q",
+      "id_field": "change_set_id",
+      "label_field": "title",
+      "params": ["change_set", "change_sets", "from_change_set", "to_change_set"]
+    },
+    "saved_query": {
+      "tool": "find_saved_queries",
+      "query_param": "q",
+      "id_field": "saved_query_id",
+      "label_field": "title",
+      "params": ["saved_query"]
+    },
+    "draft": {
+      "tool": "find_migration_drafts",
+      "query_param": "q",
+      "id_field": "draft_id",
+      "label_field": "file_name",
+      "params": ["draft"]
+    }
+  }
+}

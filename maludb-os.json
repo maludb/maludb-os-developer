@@ -273,7 +273,8 @@
                     "recent_activity"
                 ],
                 "Actions MCP": [
-                    "change_set_propose"
+                    "change_set_propose",
+                    "dba_note_post"
                 ]
             },
             "skills": [

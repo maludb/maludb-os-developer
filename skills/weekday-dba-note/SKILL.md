@@ -5,7 +5,7 @@ kind: runbook
 ---
 # The weekday DBA note
 
-**When**: weekdays 07:20 (the duty). **Writes**: `change_set_propose` (at most ten), the note, `message_send` to the Sysadmin.
+**When**: weekdays 07:20 (the duty). **Writes**: `change_set_propose` (at most ten), the note (`dba_note_post`), `message_send` to the Sysadmin.
 Nothing else. **Reads no rows.**
 
 1. `find_databases` — the targets by class. List any whose grants are pending or partial (the owner runs `grant-target.sh`).
