@@ -1187,12 +1187,31 @@ leave to use `sudo -n -u postgres` for the proofs' scratch roles and databases n
 
 ## 15. The owner's answers
 
-*Awaiting the owner (2026-10-11).* Answered so far: the repository **public**, the DNS label **`developer`** (2026-10-11, before the
-research). D1–D16 and (a)–(d) are recorded here when given.
+**2026-10-11 — every recommendation of §13 taken** ("I approve everything. Please continue"), after the repository's visibility and the
+DNS label were answered before the research:
 
-| # | Decision | Answer | Where it lives |
-|---|---|---|---|
-| — | — | — | — |
+| # | Decision | Where it lives |
+|---|---|---|
+| D1 | **"Developer", key `developer`, DNS label `developer`**, database `<tenant>_developer`, prefix `dx_`, Technology & Infrastructure, category `database`, owning department IT | `maludb-os.json`; §14; K49 (db/183, applied 2026-10-11) |
+| D2 | **The developer exception by name (K50)** — the local cluster only, through the door, as the owner's roles, at the class's ceiling and the person's level; nothing copied but a schema into a workbench and a person's export | §0.6; §3; K50 |
+| D3 | **The registry from `pg_database` with a fixed precedence, confirmed by an admin; rows deny-by-default with levels per person or role and target; seven targets proposed private by design** | §3; §6.2 |
+| D4 | **Installed applications' schemas and typed data fixes only by migration drafts** (safe forms, rehearsed, linted, literals listed), applied by the existing route; live DDL on workbenches; drafts observed applied | §6.5 |
+| D5 | **Grid edits by identity in a write window** (fresh sign-on, super-admins self-approve with the others notified); side effects refused; caps 1,000 / typed count + backup / refused over 10,000; undo 30 days; typed production DML Extended | §3; §6.6 |
+| D6 | **Developer's PHP on its own PHP-FPM pool and uid; one door; the cluster roles of §6.1; per-workbench login roles; the tool's roles local-only** | §6.1; §14; K54 |
+| D7 | **libpg_query through our own binding; the node allow-list; the function screen; settings re-asserted per statement** | §6.1 |
+| D8 | **One request = one run; the limits of §6.1; held transactions Extended** | §6.1 |
+| D9 | **Viewer, Engineer, DBA, Developer admin; no `user` role; `held_by` as §3** | §3; db/004 |
+| D10 | **Database Expert and DBA Advisor; no rows, no writes; propose, draft, rehearse; no `approvals[]`; the E9 departure for rehearsals accepted** | §5 |
+| D11 | **Classifiers; masks as column privileges kept by the grants service** | §6.9 |
+| D12 | **CodeMirror 6 and PEV2 committed bundles; Graphviz server-side, sandboxed** | §6.4; §6.7 |
+| D13 | **The curated, read-only memory section; content for DBAs, payloads by a super-admin's reveal** | §6.8 |
+| D14 | **`query_runs` per request + `door_statements`; pgaudit per tool role** | §6.10 |
+| D15 | **Roles and grants read-only; table-level `MAINTAIN`; `dx_signal()`; CSV imports into workbenches; no dump or restore; backup marks** | §6.7 |
+| D16 | **No keys, no K7, no personal MCP tokens; on request; ports 8201 / 8858 / 8859; the Spaces division** | §4; §10; §14 |
+| (a) | **The kernel's database: structure only** | §3 |
+| (b) | **Graphviz by apt** — the owner's install (`ROOT_STEPS.sh`) | §6.7; §12 |
+| (c) | **The estate hardening sweep (K53) before this tool reaches production** — the owner's; details in the private report | §12 |
+| (d) | **The root steps of §12 as written** (the owner runs them), and **the leave to use `sudo -n -u postgres` for the proofs' scratch roles and databases named `dx_*`** | `deploy/ROOT_STEPS.sh`; CLAUDE.md |
 
 ## 16. State
 
@@ -1203,5 +1222,6 @@ research). D1–D16 and (a)–(d) are recorded here when given.
   uid of its own; masks made privileges; per-target levels and private-by-design targets; per-workbench roles; the function screen;
   table-level `MAINTAIN` and `dx_signal()` instead of cluster-wide roles; the memory login's reach acknowledged; agents without rows;
   typed production DML deferred; `query_runs` kept per request with a statement child; the DS crosswalk).
-- **Next**: the owner's answers (§15) → K49 (db/183) and K50 drafted → Phase 0: the kit, the schema and its proof, **the door proof**,
-  the manifest, agents, skills and `deploy/` → the owner's go → Phase 1.
+- **2026-10-11** — **the owner approved everything** (§15); **K49 applied** (kernel db/183).
+- **Next**: Phase 0 — the kit, the schema and its proof, **the door proof**, the manifest, agents, skills and `deploy/` → the owner's go
+  → Phase 1.

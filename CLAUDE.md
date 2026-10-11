@@ -86,8 +86,8 @@ MaluDb memory system … allow database objects to be maintained in a graphical 
 - **This repository is public**: no tenant data, no secret, no credential location, no internal address ever committed; fixtures are
   synthetic; `config/.env` is gitignored.
 - **sudo is the owner's.** The cluster roles, the passfile, `grant-target.sh`, Graphviz, `dx_template`, per-role pgaudit and
-  `pg_stat_statements` are root steps in `deploy/ROOT_STEPS.sh` — ask for them; never run them. Scratch roles and databases for the
-  proofs are named `dx_*` and need the owner's leave (design §13 (d)).
+  `pg_stat_statements` are root steps in `deploy/ROOT_STEPS.sh` — ask for them; never run them. The owner gave leave (2026-10-11, design §15 (d)) to use
+  `sudo -n -u postgres` for the proofs' scratch roles and databases named `dx_*` — nothing else.
 - The kernel's rules copied here: activity `source` is `web` for the UI, `agent` under a run token, `cron` / `system` for the worker and
   the door; `action` is `entity.verb`; `mcp_*` views are the only thing the read roles see; the shared-schema rule — survey the
   siblings before any `CREATE TABLE`, reuse verbatim, extend by appending, record every table as read / reuse / new (design §6.11).
@@ -95,6 +95,6 @@ MaluDb memory system … allow database objects to be maintained in a graphical 
 
 ## State
 2026-10-11 — the repository created (public) and the research done (`docs/research/01–05`); **the design written**
-(`docs/developer-design.md` §0–§16, D1–D16 and four open questions), revised after a fresh-eyes review the same day — **awaiting the
-owner's answers**. Numbers proposed: kernel
+(`docs/developer-design.md` §0–§16, D1–D16 and four open questions), revised after a fresh-eyes review the same day — **APPROVED by the owner as recommended** (D1–D16, (a)–(d), §15); **K49
+applied** (kernel db/183). Phase 0 in progress. Numbers proposed: kernel
 db/183 (K49), K50–K54, ports 8201 / 8858 / 8859 and the door's socket, scratch 9401–9407, prefix `dx_`. Nothing built.
