@@ -1,0 +1,4 @@
+# The door and the grants service (design §6.1). Built into services/.venv by deploy/ROOT_STEPS.sh as the application's owner (K39 —
+# the installer builds only mcp/venv). Every wheel is smoke-tested on this host's CPU (x86-64-v2, no AVX) by tests/door/run.sh.
+psycopg[binary]==3.3.6
+squawk-cli==2.68.0
