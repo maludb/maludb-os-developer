@@ -1,0 +1,289 @@
+{
+    "schema": "maludb-os.application/1",
+    "catalog_key": "developer",
+    "name": "Developer",
+    "description": "The business's database development and administration tool — what phpMyAdmin is to MySQL, for PostgreSQL and the MaluDB memory system, for admins, software engineers and DBAs. Every registered database's objects with their DDL, dependencies and statistics; forms that end on one Change review page showing the exact SQL, the lock it takes and whether it rewrites the table, linted and rehearsed on a throwaway copy; workbenches where schemas are designed live and exported as the next numbered migration for an application's repository — installed applications' schemas change only that way; data read at a level granted per person, with personal columns masked by the database's own privileges and row edits made in a time-boxed window and undoable; the SQL editor with plans; what the server is doing, maintenance and health findings; a curated, read-only view of the memory databases. One door holds the tool's database credentials and audits every statement.",
+    "business_area": "Technology & Infrastructure",
+    "category": "database",
+    "icon": "feather-database",
+    "version": "0.1.0",
+    "criticality": "high",
+    "grant_standing_departments": false,
+    "runtime": {
+        "php_pool": "developer"
+    },
+    "vhost": {
+        "label": "developer",
+        "document_root": "html",
+        "internal_port_env": "APP_INTERNAL_PORT"
+    },
+    "database": {
+        "suffix": "developer",
+        "migrations": "db",
+        "roles": {
+            "rw": "developer_rw",
+            "records_ro": "developer_records_ro",
+            "activity_ro": "developer_activity_ro"
+        }
+    },
+    "env": {
+        "required": [
+            "APP_NAME",
+            "APP_URL",
+            "DB_HOST",
+            "DB_PORT",
+            "DB_NAME",
+            "DB_USER",
+            "DB_PASSWORD",
+            "MCP_RECORDS_DB_USER",
+            "MCP_RECORDS_DB_PASSWORD",
+            "MCP_ACTIVITY_DB_USER",
+            "MCP_ACTIVITY_DB_PASSWORD",
+            "APP_INTERNAL_PORT",
+            "MCP_RECORDS_PORT",
+            "MCP_ACTIVITY_PORT",
+            "ACTION_TOKEN_KEY",
+            "ACTIONS_RELAY_KEY",
+            "OS_APPLICATION_TOKEN",
+            "OS_INTERNAL_URL",
+            "OS_LAUNCHER_URL",
+            "APP_KEY",
+            "MALUDB_API_URL",
+            "MALUDB_API_TOKEN",
+            "DX_DOOR_SOCKET",
+            "DX_DOOR_KEY"
+        ],
+        "optional": [
+            "MALUMAIL_API_KEY",
+            "MAIL_FROM",
+            "MAIL_FROM_NAME",
+            "DX_DOOR_POOL_MAX",
+            "DX_SHOW_ROWS",
+            "DX_SHOW_BYTES",
+            "DX_DOT"
+        ]
+    },
+    "services": [
+        "deploy/developer-records-mcp.service",
+        "deploy/developer-activity-mcp.service",
+        "deploy/developer-activity-ingest.service",
+        "deploy/developer-activity-ingest.timer",
+        "deploy/developer-directory-sync.service",
+        "deploy/developer-directory-sync.timer",
+        "deploy/developer-worker.service",
+        "deploy/developer-worker.timer",
+        "deploy/developer-door.socket",
+        "deploy/developer-door.service",
+        "deploy/developer-grants.service"
+    ],
+    "endpoints": [
+        {
+            "name": "Web UI",
+            "kind": "ui",
+            "path": "/",
+            "auth_kind": "none",
+            "agent_reachable": false
+        },
+        {
+            "name": "Health",
+            "kind": "http_api",
+            "path": "/api/v1/health",
+            "auth_kind": "none",
+            "agent_reachable": false
+        },
+        {
+            "name": "Records MCP",
+            "kind": "mcp",
+            "path": "/mcp/records",
+            "auth_kind": "bearer",
+            "agent_reachable": true,
+            "mcp_surface_version": 1
+        },
+        {
+            "name": "Activity MCP",
+            "kind": "mcp",
+            "path": "/mcp/activity",
+            "auth_kind": "bearer",
+            "agent_reachable": true,
+            "mcp_surface_version": 1
+        }
+    ],
+    "actions": {
+        "manifest": "docs/developer-action-manifest.md",
+        "registry": "mcp/action_registry.json",
+        "base_url_env": "APP_INTERNAL_PORT"
+    },
+    "skills": [
+        "skills/developer-basics",
+        "skills/reading-postgres",
+        "skills/safe-ddl",
+        "skills/explaining-plans",
+        "skills/maludb-memory-rules",
+        "skills/investigate-a-slow-query",
+        "skills/find-what-is-blocking",
+        "skills/draft-an-index",
+        "skills/design-a-table-on-a-workbench",
+        "skills/weekday-dba-note"
+    ],
+    "sso": {
+        "path": "/sso",
+        "logout_path": "/sso/logout"
+    },
+    "directory": {
+        "reads": true,
+        "writes": false
+    },
+    "assistant": {
+        "command_bar": true,
+        "agent": "expert"
+    },
+    "agents": [
+        {
+            "key": "expert",
+            "name": "Database Expert",
+            "job_description": "os/expert.md",
+            "access_capability": "write",
+            "hired_on_install": true,
+            "roles": [
+                "engineer"
+            ],
+            "tool_grants": {
+                "Records MCP": [
+                    "find_databases",
+                    "get_database",
+                    "database_overview",
+                    "catalog_search",
+                    "table_describe",
+                    "object_describe",
+                    "object_ddl",
+                    "impact",
+                    "object_dependencies",
+                    "join_path",
+                    "object_privileges",
+                    "role_describe",
+                    "object_history",
+                    "schema_changes",
+                    "schema_compare",
+                    "column_classes",
+                    "explain",
+                    "get_plan",
+                    "top_statements",
+                    "index_advice",
+                    "bloat",
+                    "vacuum_state",
+                    "activity_now",
+                    "blockers",
+                    "locks",
+                    "health_findings",
+                    "maintenance_jobs",
+                    "backup_posture",
+                    "find_change_sets",
+                    "get_change_set",
+                    "ddl_cost",
+                    "get_rehearsal",
+                    "find_migration_drafts",
+                    "get_migration_draft",
+                    "find_workbenches",
+                    "get_workbench",
+                    "memory_estate",
+                    "memory_health",
+                    "memory_episode_stats",
+                    "memory_graph_stats",
+                    "memory_model_config",
+                    "memory_skills",
+                    "memory_facades",
+                    "find_saved_queries",
+                    "get_saved_query",
+                    "advisor_proposals"
+                ],
+                "Activity MCP": [
+                    "record_history",
+                    "recent_activity",
+                    "activity_search"
+                ],
+                "Actions MCP": [
+                    "change_set_propose",
+                    "migration_draft_create",
+                    "rehearsal_run",
+                    "saved_query_save"
+                ]
+            },
+            "skills": [
+                "skills/developer-basics",
+                "skills/reading-postgres",
+                "skills/safe-ddl",
+                "skills/explaining-plans",
+                "skills/maludb-memory-rules",
+                "skills/investigate-a-slow-query",
+                "skills/find-what-is-blocking",
+                "skills/draft-an-index",
+                "skills/design-a-table-on-a-workbench"
+            ]
+        },
+        {
+            "key": "advisor",
+            "name": "DBA Advisor",
+            "job_description": "os/advisor.md",
+            "access_capability": "write",
+            "hired_on_install": true,
+            "roles": [
+                "engineer"
+            ],
+            "duty": {
+                "name": "The weekday DBA note",
+                "schedule_cron": "20 7 * * 1-5",
+                "runbook": "skills/weekday-dba-note",
+                "instructions": "Every weekday, follow the runbook weekday-dba-note: read the health findings, the top statements, drift, the migration drafts not yet observed applied, the workbenches near expiry and the windows used across the registered databases; propose each fix as a change set (change_set_propose) for a DBA to review; then write one short note for the DBA role holders and send the kernel's Sysadmin agent the same summary. Read no rows, apply nothing, ask for no window and no unmask."
+            },
+            "tool_grants": {
+                "Records MCP": [
+                    "find_databases",
+                    "get_database",
+                    "database_overview",
+                    "catalog_search",
+                    "table_describe",
+                    "object_describe",
+                    "object_ddl",
+                    "impact",
+                    "object_dependencies",
+                    "schema_changes",
+                    "column_classes",
+                    "top_statements",
+                    "index_advice",
+                    "bloat",
+                    "vacuum_state",
+                    "activity_now",
+                    "blockers",
+                    "locks",
+                    "health_findings",
+                    "maintenance_jobs",
+                    "backup_posture",
+                    "find_change_sets",
+                    "get_change_set",
+                    "ddl_cost",
+                    "find_migration_drafts",
+                    "get_migration_draft",
+                    "find_workbenches",
+                    "memory_estate",
+                    "memory_health",
+                    "advisor_proposals"
+                ],
+                "Activity MCP": [
+                    "record_history",
+                    "recent_activity"
+                ],
+                "Actions MCP": [
+                    "change_set_propose"
+                ]
+            },
+            "skills": [
+                "skills/developer-basics",
+                "skills/reading-postgres",
+                "skills/safe-ddl",
+                "skills/find-what-is-blocking",
+                "skills/draft-an-index",
+                "skills/weekday-dba-note"
+            ]
+        }
+    ]
+}
