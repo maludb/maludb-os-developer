@@ -1,0 +1,5 @@
+# Built by deploy/build-libpg_query.sh and deploy/ROOT_STEPS.sh on each host — never committed.
+vendor/
+.venv/
+__pycache__/
+*.pyc
