@@ -19,7 +19,13 @@ users in, following the `maludb-os-integration` contract.
 | [04-estate.md](docs/research/04-estate.md) | The guidelines' rules that bind a database tool, the integration contract, the estate's databases and how their migrations run, the kernel's governance, free numbers. 30 requirements (E1–E30) and proposed kernel items. |
 | [05-safety.md](docs/research/05-safety.md) | Credential models, the vulnerability history of web database tools, change control alongside numbered migrations, AI agents with database access, the threat model. 36 requirements (S1–S36) and the owner's decisions. |
 
-Next: the design, `docs/developer-design.md` (§0–§16, decisions D1–D16 for the owner).
+**Design written (2026-10-11):** [`docs/developer-design.md`](docs/developer-design.md) — §0–§16, decisions D1–D16 and four open
+questions awaiting the owner. In short: one sandboxed service (*the door*) is the only path to any database and the only holder of
+the tool's database credentials; every database has a class whose ceiling the door enforces; installed applications' schemas change
+only through migration files drafted, rehearsed and linted here and applied by the existing route, while *workbenches* the tool
+creates are designed live; rows are deny-by-default per person and masks are database privileges, not a display filter; row edits on production happen only in
+a time-boxed write window; the MaluDB memory databases are shown in a curated, read-only section; the tool's AI agents explain,
+propose and draft, and in version 1 read no rows and write no database.
 
 Some estate security findings from the research were reported privately to the owner and are left out of
 these public copies until they are fixed. Each one is marked where it was removed.
