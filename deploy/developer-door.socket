@@ -1,0 +1,24 @@
+# NOTHING HERE HAS BEEN RUN — the owner runs it (the kernel's installer renders and enables this unit). THE DOOR'S LISTENING SOCKET
+# (design §6.1). systemd creates /run/developer/door.sock owned by developer-door, group developer (developer-web + developer-mcp), mode
+# 0660, and passes it to developer-door.service (socket activation, Accept=no: the door receives the listening socket as fd 3 —
+# LISTEN_FDS — and accepts on it; MaluMail's image door is the precedent).
+#
+# WHY A SOCKET UNIT: the door must hand its socket to the group `developer` without being a member of it — a member could read
+# config/.env (root:developer 0640). systemd sets the socket's owner and group itself, so the door's own user stays out of the group.
+# DX_DOOR_SOCKET in config/.env names this path for PHP and the MCP servers. Every request still carries an HMAC under DX_DOOR_KEY, and
+# the door checks SO_PEERCRED against developer-web and developer-mcp (design §6.1 "Who may talk to the door").
+[Unit]
+Description=Developer door — listening socket (/run/developer/door.sock)
+ConditionPathExists={{APP_DIR}}/services/door/server.py
+
+[Socket]
+ListenStream=/run/developer/door.sock
+SocketUser=developer-door
+SocketGroup=developer
+SocketMode=0660
+DirectoryMode=0755
+Accept=no
+RemoveOnStop=yes
+
+[Install]
+WantedBy=sockets.target

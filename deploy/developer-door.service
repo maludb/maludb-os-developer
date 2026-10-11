@@ -1,0 +1,68 @@
+# NOTHING HERE HAS BEEN RUN — the owner runs it (the kernel's installer renders and enables this unit; deploy/ROOT_STEPS.sh makes its
+# user, its environment file and its passfile first). THE DOOR (design §6.1): the only holder of the tool's database credentials and the
+# only path to any target database. Every statement is parsed with libpg_query, classified by an allow-list of parse-tree nodes, its
+# functions screened, run as the least-privileged tier the target's class and the person's level allow, capped and audited.
+#
+# Its own user developer-door (not in the group developer — it never reads config/.env). Its secrets:
+#   /etc/developer/door.env     root:developer-door 0640 — DX_DOOR_KEY (the request HMAC), PGPASSFILE, PGHOST, DX_APP_DB, limits
+#   /etc/developer/door.pgpass  developer-door 0600      — the passwords of developer_meta, _read, _read_masked, _write, _ops,
+#                                                           _rolemaker and _memory (never developer_grantor: that is the grants service's)
+#   /var/lib/developer-door/    developer-door 0700      — each workbench role's generated password (StateDirectory)
+# It reaches PostgreSQL on 127.0.0.1 only (pg_hba admits its roles from loopback alone); it starts pg_dump / pg_restore by argument
+# array for schema-only clones (never through a shell) and squawk from the services' venv.
+#
+# NOT BUILT YET: services/door/server.py is Phase 0's door proof and slice 3's (fork A's paths). Until it exists, ConditionPathExists
+# skips this unit and its socket.
+[Unit]
+Description=Developer door — the one path to every target database (socket-activated, /run/developer/door.sock)
+Requires=developer-door.socket
+After=developer-door.socket network.target postgresql.service
+ConditionPathExists={{APP_DIR}}/services/door/server.py
+
+[Service]
+Type=simple
+User=developer-door
+Group=developer-door
+Sockets=developer-door.socket
+WorkingDirectory={{APP_DIR}}
+EnvironmentFile=/etc/developer/door.env
+Environment=PYTHONUNBUFFERED=1
+UnsetEnvironment=http_proxy https_proxy HTTP_PROXY HTTPS_PROXY all_proxy ALL_PROXY no_proxy NO_PROXY
+ExecStart={{APP_DIR}}/services/.venv/bin/python -I {{APP_DIR}}/services/door/server.py
+Restart=always
+RestartSec=2
+StateDirectory=developer-door
+StateDirectoryMode=0700
+UMask=0077
+# the sandbox, as the Data Lake's query pool: memory, CPU, tasks; read-only everywhere; nothing off the host
+MemoryMax=1536M
+CPUQuota=200%
+TasksMax=128
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+CapabilityBoundingSet=
+AmbientCapabilities=
+ReadOnlyPaths={{APP_DIR}}
+InaccessiblePaths=-{{APP_DIR}}/config -{{APP_DIR}}/storage
+# PostgreSQL on loopback; the listening socket is passed in by systemd (an AF_UNIX socket the IP lists do not govern)
+IPAddressDeny=any
+IPAddressAllow=localhost
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+
+[Install]
+WantedBy=multi-user.target

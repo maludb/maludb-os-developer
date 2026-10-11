@@ -1,0 +1,59 @@
+# NOTHING HERE HAS BEEN RUN — the owner runs it (the kernel's installer renders and enables this unit; deploy/ROOT_STEPS.sh makes its
+# user, its environment file and its passfile first). THE GRANTS SERVICE (design §6.1, §6.9): masks are privileges, not a display filter.
+# Every minute it reads the plan (the view mcp_grant_plan in the tool's own database: the column classes and the registered targets) and,
+# as developer_grantor, grants and revokes COLUMN privileges for developer_read (every column not `secret`), developer_read_masked
+# (neither `secret` nor `personal`) and developer_write (column SELECT, INSERT, UPDATE on non-secret columns; table DELETE) on each
+# registered application and development target. Independently of the plan it never grants a column whose name matches the built-in
+# `secret` patterns unless a super-admin cleared that column in the tool. Its changes are recorded so drift marks them explained.
+#
+# Its own user developer-grants (never the door's, never in the group developer). Its secrets:
+#   /etc/developer/grants.env     root:developer-grants 0640 — PGPASSFILE, PGHOST, DX_APP_DB
+#   /etc/developer/grants.pgpass  developer-grants 0600      — developer_grantor's password (and nothing else)
+#
+# NOT BUILT YET: services/grants/service.py is Phase 0's / slice 1's (fork A's paths). Until it exists, ConditionPathExists skips it.
+[Unit]
+Description=Developer grants service — keeps the read and write tiers' column privileges in step with the classifications
+After=network.target postgresql.service
+ConditionPathExists={{APP_DIR}}/services/grants/service.py
+
+[Service]
+Type=simple
+User=developer-grants
+Group=developer-grants
+WorkingDirectory={{APP_DIR}}
+EnvironmentFile=/etc/developer/grants.env
+Environment=PYTHONUNBUFFERED=1
+ExecStart={{APP_DIR}}/services/.venv/bin/python -I {{APP_DIR}}/services/grants/service.py
+Restart=always
+RestartSec=10
+UMask=0077
+MemoryMax=256M
+TasksMax=32
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+CapabilityBoundingSet=
+AmbientCapabilities=
+ReadOnlyPaths={{APP_DIR}}
+InaccessiblePaths=-{{APP_DIR}}/config -{{APP_DIR}}/storage
+IPAddressDeny=any
+IPAddressAllow=localhost
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,18 @@
+# NOTHING HERE HAS BEEN RUN — the owner runs it. Developer's worker — the clock (one pass, design §14): discovery and grants state,
+# the catalog index, the nightly snapshots and drift, the applied-draft check, window and workbench expiry and quotas, maintenance and
+# export jobs, the outbox, retention (query text 90 days, rows 2 years), dispatch retries, worker passes. It reaches targets only
+# through the door's socket, as developer-web.
+[Unit]
+Description=Developer worker — the clock (one pass)
+After=network.target postgresql.service developer-door.socket
+
+[Service]
+Type=oneshot
+User=developer-web
+Group=developer
+WorkingDirectory={{APP_DIR}}
+ExecStart=/usr/bin/php {{APP_DIR}}/bin/worker.php
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true

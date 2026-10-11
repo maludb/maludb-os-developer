@@ -1,0 +1,22 @@
+# NOTHING HERE HAS BEEN RUN — the owner runs it (the kernel's installer renders and enables this unit). Developer's activity MCP server:
+# the application's own activity (record_history, actor_timeline, recent_activity, activity_search) for hired agents. No target credential.
+[Unit]
+Description=Developer activity MCP server (FastMCP, loopback :{{MCP_ACTIVITY_PORT}})
+After=network.target postgresql.service
+ConditionPathExists={{APP_DIR}}/mcp/activity_server.py
+
+[Service]
+Type=simple
+User=developer-mcp
+Group=developer
+WorkingDirectory={{APP_DIR}}/mcp
+ExecStart={{APP_DIR}}/mcp/venv/bin/python {{APP_DIR}}/mcp/activity_server.py
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target
